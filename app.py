@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template
 import requests
 
 from backend.api import api
@@ -13,14 +13,14 @@ class VueFlask(Flask):
         variable_end_string=']]',
         comment_start_string='[#',
         comment_end_string='#]',
-        ))
+    ))
 
 
 # Blueprints
 
 app = VueFlask(__name__,
-        static_folder='./dist/static',
-        template_folder='./dist')
+               static_folder='./dist/static',
+               template_folder='./dist')
 
 app.register_blueprint(api)
 
@@ -31,4 +31,3 @@ def index(path):
     if app.debug:
         return requests.get(f'http://localhost:8080/{path}').text
     return render_template("index.html")
-
