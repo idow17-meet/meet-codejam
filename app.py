@@ -31,3 +31,7 @@ def index(path):
     if app.debug:
         return requests.get(f'http://localhost:8080/{path}').text
     return render_template("index.html")
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
