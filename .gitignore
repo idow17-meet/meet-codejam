@@ -102,3 +102,13 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# MacOS
+.DS_Store
+
+# Project preferences
+.idea
+.vscode
+
+# NodeJS Stuff
+**/node_modules/
