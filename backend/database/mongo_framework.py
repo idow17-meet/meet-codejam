@@ -60,7 +60,7 @@ class MongoCodejamDB(CodejamDB):
         :param password:
         :return:
         """
-        return sha512(password.encode() + self.__password_salt.encode()).hexdigest()
+        return sha512(password.encode() + self.__password_salt.encode()).digest()
 
     def add_group(self, group: model.Group):
         """
