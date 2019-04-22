@@ -158,7 +158,7 @@ class MongoCodejamDB(CodejamDB):
 
         :param group_name: Group's name or ID (name converted to ID)
         """
-        score_documents = self.__scores.find({const.ID_KEY: group_name.upper()})
+        score_documents = self.__scores.find({const.SCORE_GROUP_ID: group_name.upper()})
         return [self.__document_to_score(document) for document in score_documents]
 
     def get_group_score(self, group_name: str, problem_name: str) -> model.Score:
@@ -168,6 +168,6 @@ class MongoCodejamDB(CodejamDB):
         :param problem_name: The problem's name or ID (name converted to ID)
         :return: The group's score
         """
-        score = self.__scores.find_one({const.ID_KEY: group_name.upper(),
+        score = self.__scores.find_one({const.SCORE_GROUP_ID: group_name.upper(),
                                         const.SCORE_PROBLEM_ID: problem_name.upper()})
         return self.__document_to_score(score)
