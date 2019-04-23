@@ -21,12 +21,78 @@ class CodejamDB(ABC):
         pass
 
     @abstractmethod
+    def get_group(self, group_name: str) -> model.Group:
+        """
+        Retrieves a group using its name / ID
+
+        :param group_name: Group's name or ID (name converted to ID)
+        :return: The corresponding group
+        """
+        pass
+
+    @abstractmethod
+    def get_all_groups(self) -> model.GroupList:
+        """
+        Retrieves the entire group list
+
+        :return: List containing all group objects in the database
+        """
+        pass
+
+    @abstractmethod
+    def edit_group(self, group_name: str, updated_group: model.Group):
+        """
+        Modify an existing group
+
+        :param group_name: Group's name or ID (name converted to ID)
+        :param updated_group: The modified group
+        """
+        pass
+
+    @abstractmethod
+    def delete_group(self, group_name: str):
+        """
+        Deletes a group using its name / ID
+
+        :param group_name: Group's name or ID (name converted to ID)
+        """
+
+    @abstractmethod
     def add_problem(self, problem: model.Problem):
         """
         Add a problem / question for the codejam, while creating the appropriate score instances for each group.
         Sets the problem instance's problem_id
 
         :param problem: The problem to add
+        """
+        pass
+
+    @abstractmethod
+    def get_problem(self, problem_name: str) -> model.Problem:
+        """
+        Retrieves a problem using its name / ID
+
+        :param problem_name: Problem's name or ID (name converted to ID)
+        :return: The corresponding group
+        """
+        pass
+
+    @abstractmethod
+    def get_all_problems(self) -> model.ProblemList:
+        """
+        Retrieves the entire problem list
+
+        :return: List containing all problem objects in the database
+        """
+        pass
+
+    @abstractmethod
+    def edit_problem(self, problem_name: str, updated_problem: model.Problem):
+        """
+        Modify an existing problem
+
+        :param problem_name: Problem's name or ID (name converted to ID)
+        :param updated_problem: The modified problem
         """
         pass
 
@@ -40,6 +106,59 @@ class CodejamDB(ABC):
         pass
 
     @abstractmethod
+    def get_group_scores(self, group_name: str) -> model.ScoreList:
+        """
+        Gets the group's entire score list
+
+        :param group_name: Group's name or ID (name converted to ID)
+        """
+        pass
+
+    @abstractmethod
+    def get_group_score(self, group_name: str, problem_id: str) -> model.Score:
+        """
+        Gets the group's score entity
+
+        :param group_name: Group's name or ID (name converted to ID)
+        :param problem_id: The problem's ID
+        """
+        pass
+
+    # The following may not be needed:
+    @abstractmethod
+    def edit_score(self, score_id: str, updated_score: model.Score):
+        """
+        Update an existing score's fields
+
+        :param score_id: The score's unique ID
+        :param updated_score: The new score object
+        """
+        pass
+
+    @abstractmethod
+    def submit_answer(self, group_name: str, answer: str, code: str) -> bool:
+        """
+        Submit an answer, update accordingly in the DB
+
+        :param group_name: The name / ID of the group submitting
+        :param answer: The answer the group is submitting
+        :param code: The group's code for the problem, for validation
+        :return: True if the answer was correct
+        """
+        pass
+
+    @abstractmethod
+    def use_hint(self, group_name: str, problem_name: str) -> str:
+        """
+        Gets the hint for the given problem while saving that the group used it
+
+        :param group_name: The group's name / ID
+        :param problem_name: The problem's name / ID
+        :return: The hint for the problem
+        """
+        pass
+
+    @abstractmethod
     def is_correct_login(self, username: str, password: str, *, should_hash: bool = True) -> bool:
         """
         Verifies that the given username and password are correct
@@ -48,24 +167,5 @@ class CodejamDB(ABC):
         :param password: The group's password
         :param should_hash: Whether or not the given password should be hashed before comparison
         :return: True if the login is correct
-        """
-        pass
-
-    @abstractmethod
-    def get_group_scores(self, group_id: str) -> model.ScoreList:
-        """
-        Gets the group's entire score list
-
-        :param group_id: Group's unique identifier
-        """
-        pass
-
-    @abstractmethod
-    def get_group_score(self, group_id: str, problem_id: str) -> model.Score:
-        """
-        Gets the group's score entity
-
-        :param group_id: The group's ID
-        :param problem_id: The problem's ID
         """
         pass
