@@ -21,6 +21,7 @@ PROBLEM_DIFFICULTY = 'difficulty'
 PROBLEM_DESCRIPTION = 'description'
 PROBLEM_POINTS = 'points'
 PROBLEM_ANSWER = 'answer'
+PROBLEM_HINT = 'hint'
 
 # Score collection
 SCORE_GROUP_ID = 'group_id'

@@ -12,11 +12,11 @@ version of the group / problem's name (since the name is unique, and this makes 
 
 from pymongo import MongoClient
 from hashlib import sha512
-from bson.objectid import ObjectId
 
 import backend.database.model as model
 from backend.database.framework import CodejamDB
-import backend.database.mongo_consts as const
+import mongo.consts as const
+import mongo.translations as trans
 
 
 class MongoCodejamDB(CodejamDB):
@@ -36,23 +36,6 @@ class MongoCodejamDB(CodejamDB):
 
         # TODO: When deploying, replace this with an environment variable
         self.__password_salt = 'b32197fwqgfFWEIO014jfx-a?'
-
-    @staticmethod
-    def __document_to_score(document: dict) -> model.Score:
-        """
-        Creates a score instance from a document
-        :param document: The document to create an instance from
-        :return: The matching score instance
-        """
-        return model.Score(
-            group_id=str(document[const.SCORE_GROUP_ID]),
-            problem_id=str(document[const.SCORE_PROBLEM_ID]),
-            current_points=document.get(const.SCORE_CURRENT_POINTS, 0),
-            submitted_answer=document.get(const.SCORE_SUBMITTED_ANSWER, None),
-            submitted_code=document.get(const.SCORE_SUBMITTED_CODE, None),
-            hint_used=document.get(const.SCORE_HINT_USED, False),
-            score_id=str(document.get(const.ID_KEY))
-        )
 
     def __hash_password(self, password: str) -> str:
         """
@@ -90,6 +73,34 @@ class MongoCodejamDB(CodejamDB):
             problem_id = str(problem[const.ID_KEY])
             self.add_score(model.Score(group.group_id, problem_id))
 
+    def get_group(self, group_name: str) -> model.Group:
+        """
+        Retrieves a group using its name / ID
+
+        :param group_name: Group's name or ID (name converted to ID)
+        :return: The corresponding group
+        """
+        document = self.__groups.find({const.ID_KEY: group_name.upper()})
+        return self.__document_to_group(document)
+
+    def get_all_groups(self) -> model.GroupList:
+        """
+        Retrieves the entire group list
+
+        :return: List containing all group objects in the database
+        """
+        return [self.__document_to_group(document) for document in self.__groups.find()]
+
+    def edit_group(self, group_name: str, updated_group: model.Group):
+        """
+        Modify an existing group
+
+        :param group_name: Group's name or ID (name converted to ID)
+        :param updated_group: The modified group
+        """
+        # Convert group to document and use replace_one
+        pass
+
     def add_problem(self, problem: model.Problem):
         """
         Add a problem / question for the codejam, while creating the appropriate score instances for each group.
@@ -106,7 +117,8 @@ class MongoCodejamDB(CodejamDB):
             const.PROBLEM_DIFFICULTY: problem.difficulty,
             const.PROBLEM_DESCRIPTION: problem.description,
             const.PROBLEM_POINTS: problem.points,
-            const.PROBLEM_ANSWER: problem.answer
+            const.PROBLEM_ANSWER: problem.answer,
+            const.PROBLEM_HINT: problem.hint
         }
 
         result = self.__problems.insert_one(new_problem)
@@ -159,7 +171,7 @@ class MongoCodejamDB(CodejamDB):
         :param group_name: Group's name or ID (name converted to ID)
         """
         score_documents = self.__scores.find({const.SCORE_GROUP_ID: group_name.upper()})
-        return [self.__document_to_score(document) for document in score_documents]
+        return [trans.document_to_score(document) for document in score_documents]
 
     def get_group_score(self, group_name: str, problem_name: str) -> model.Score:
         """
@@ -170,4 +182,4 @@ class MongoCodejamDB(CodejamDB):
         """
         score = self.__scores.find_one({const.SCORE_GROUP_ID: group_name.upper(),
                                         const.SCORE_PROBLEM_ID: problem_name.upper()})
-        return self.__document_to_score(score)
+        return trans.document_to_score(score)
