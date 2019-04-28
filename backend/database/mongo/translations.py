@@ -2,8 +2,9 @@
 Defines translations between mongo's documents and the project's dataclasses
 """
 
+from bson.objectid import ObjectId
 import backend.database.model as model
-import mongo.consts as const
+import backend.database.mongo.consts as const
 
 
 ##
@@ -67,3 +68,59 @@ def document_to_problem(document: dict) -> model.Problem:
 # Dataclasses to documents:
 ##
 
+
+def score_to_document(score: model.Score) -> dict:
+    """
+    Converts a score instance to a mongo document
+    :param score: The score instance to convert
+    :return: A mongo document (dictionary)
+    """
+    document = {
+        const.SCORE_GROUP_ID: score.group_id,
+        const.SCORE_PROBLEM_ID: score.problem_id,
+        const.SCORE_CURRENT_POINTS: score.current_points,
+        const.SCORE_SUBMITTED_ANSWER: score.submitted_answer,
+        const.SCORE_SUBMITTED_CODE: score.submitted_code,
+        const.SCORE_HINT_USED: score.hint_used,
+    }
+
+    if score.score_id:
+        document.update({const.ID_KEY: ObjectId(score.score_id)})
+    return document
+
+
+def group_to_document(group: model.Group) -> dict:
+    """
+    Converts a group instance to a mongo document
+    :param group: The group instance to convert
+    :return: A mongo document (dictionary)
+    """
+    document = {
+        const.GROUP_NAME: group.name,
+        const.GROUP_MEMBERS: group.members,
+        const.GROUP_PASSWORD: group.password,
+        const.GROUP_HIDDEN: group.hidden,
+        const.GROUP_ADMIN: group.admin,
+        const.ID_KEY: group.name.upper()
+    }
+
+    return document
+
+
+def problem_to_document(problem: model.Problem) -> dict:
+    """
+    Converts a problem instance to a mongo document
+    :param problem: The problem instance to convert
+    :return: A mongo document (dictionary)
+    """
+    document = {
+        const.PROBLEM_NAME: problem.name,
+        const.PROBLEM_DIFFICULTY: problem.difficulty,
+        const.PROBLEM_DESCRIPTION: problem.description,
+        const.PROBLEM_POINTS: problem.points,
+        const.PROBLEM_ANSWER: problem.answer,
+        const.PROBLEM_HINT: problem.hint,
+        const.ID_KEY: problem.name.upper()
+    }
+
+    return document

@@ -12,17 +12,21 @@ version of the group / problem's name (since the name is unique, and this makes 
 
 from pymongo import MongoClient
 from hashlib import sha512
+from copy import deepcopy
 
 import backend.database.model as model
 from backend.database.framework import CodejamDB
-import mongo.consts as const
-import mongo.translations as trans
+import backend.database.mongo.consts as const
+import backend.database.mongo.translations as trans
 
 
 class MongoCodejamDB(CodejamDB):
     """
     Codejam database operations using MongoDB
     """
+
+    # TODO: Make this adjustable
+    HINT_USED_PERCENTAGE = 0.5
 
     def __init__(self, database_uri: str):
         """
@@ -54,14 +58,12 @@ class MongoCodejamDB(CodejamDB):
         if self.__groups.count_documents({const.ID_KEY: group.name.upper()}) > 0:
             raise ValueError("Group with given name already exists")
 
-        new_group = {
-            const.ID_KEY: group.name.upper(),
-            const.GROUP_NAME: group.name,
-            const.GROUP_MEMBERS: group.members,
-            const.GROUP_PASSWORD: self.__hash_password(group.password),
-            const.GROUP_HIDDEN: group.hidden,
-            const.GROUP_ADMIN: group.admin
-        }
+        group_copy = deepcopy(group)  # In order to avoid changing the original group's password field
+        # Hash password if in plaintext
+        if not isinstance(group_copy.password, bytes):
+            group_copy.password = self.__hash_password(group_copy.password)
+
+        new_group = trans.group_to_document(group_copy)
 
         # Insert and store the returned mongo-created ID in the dataclass
         result = self.__groups.insert_one(new_group)
@@ -81,7 +83,7 @@ class MongoCodejamDB(CodejamDB):
         :return: The corresponding group
         """
         document = self.__groups.find({const.ID_KEY: group_name.upper()})
-        return self.__document_to_group(document)
+        return trans.document_to_group(document)
 
     def get_all_groups(self) -> model.GroupList:
         """
@@ -89,7 +91,7 @@ class MongoCodejamDB(CodejamDB):
 
         :return: List containing all group objects in the database
         """
-        return [self.__document_to_group(document) for document in self.__groups.find()]
+        return [trans.document_to_group(document) for document in self.__groups.find()]
 
     def edit_group(self, group_name: str, updated_group: model.Group):
         """
@@ -98,8 +100,25 @@ class MongoCodejamDB(CodejamDB):
         :param group_name: Group's name or ID (name converted to ID)
         :param updated_group: The modified group
         """
-        # Convert group to document and use replace_one
-        pass
+        updated_document = trans.group_to_document(updated_group)
+        # Hash password if in plaintext
+        if not isinstance(updated_group.password, bytes):
+            updated_document[const.GROUP_PASSWORD] = self.__hash_password(updated_group.password)
+
+        self.__groups.remove({const.ID_KEY: group_name.upper()})
+        self.__groups.insert_one(updated_document)
+        if updated_group.name != group_name:
+            self.__scores.update_many({const.SCORE_GROUP_ID: group_name.upper()},
+                                      {"$set": {const.SCORE_GROUP_ID: updated_group.name.upper()}})
+
+    def delete_group(self, group_name: str):
+        """
+        Deletes an existing group
+
+        :param group_name: Group's name or ID (name converted to ID)
+        """
+        self.__groups.remove({const.ID_KEY: group_name.upper()})
+        self.__scores.remove({const.SCORE_GROUP_ID: group_name.upper()})
 
     def add_problem(self, problem: model.Problem):
         """
@@ -111,16 +130,7 @@ class MongoCodejamDB(CodejamDB):
         if self.__problems.count_documents({const.ID_KEY: problem.name.upper()}) > 0:
             raise ValueError("Problem with given name already exists")
 
-        new_problem = {
-            const.ID_KEY: problem.name.upper(),
-            const.PROBLEM_NAME: problem.name,
-            const.PROBLEM_DIFFICULTY: problem.difficulty,
-            const.PROBLEM_DESCRIPTION: problem.description,
-            const.PROBLEM_POINTS: problem.points,
-            const.PROBLEM_ANSWER: problem.answer,
-            const.PROBLEM_HINT: problem.hint
-        }
-
+        new_problem = trans.problem_to_document(problem)
         result = self.__problems.insert_one(new_problem)
         problem.problem_id = result.inserted_id
 
@@ -129,40 +139,57 @@ class MongoCodejamDB(CodejamDB):
             group_id = group[const.ID_KEY]
             self.add_score(model.Score(group_id, problem.problem_id))
 
+    def get_problem(self, problem_name: str) -> model.Problem:
+        """
+        Retrieves a problem using its name / ID
+
+        :param problem_name: Problem's name or ID (name converted to ID)
+        :return: The corresponding group
+        """
+        document = self.__problems.find({const.ID_KEY: problem_name.upper()})
+        return trans.document_to_problem(document)
+
+    def get_all_problems(self) -> model.ProblemList:
+        """
+       Retrieves the entire problem list
+
+       :return: List containing all problem objects in the database
+       """
+        return [trans.document_to_problem(document) for document in self.__problems.find()]
+
+    def edit_problem(self, problem_name: str, updated_problem: model.Problem):
+        """
+        Modify an existing problem
+
+        :param problem_name: Problem's name or ID (name converted to ID)
+        :param updated_problem: The modified problem
+        """
+        updated_document = trans.problem_to_document(updated_problem)
+
+        self.__problems.remove({const.ID_KEY: problem_name.upper()})
+        self.__problems.insert_one(updated_document)
+        if updated_problem.name != problem_name:
+            self.__scores.update_many({const.SCORE_PROBLEM_ID: problem_name.upper()},
+                                      {"$set": {const.SCORE_PROBLEM_ID: updated_problem.name.upper()}})
+
+    def delete_problem(self, problem_name: str):
+        """
+        Deletes a problem using its name / ID
+
+        :param problem_name: Problem's name or ID (name converted to ID)
+        """
+        self.__problems.remove({const.ID_KEY: problem_name.upper()})
+        self.__scores.remove({const.SCORE_PROBLEM_ID: problem_name.upper()})
+
     def add_score(self, score: model.Score):
         """
         Adds a score instance of the given problem for the given group
 
         :param score: The score to add
         """
-        new_score = {
-            const.SCORE_GROUP_ID: score.group_id,
-            const.SCORE_PROBLEM_ID: score.problem_id,
-            const.SCORE_SUBMITTED_ANSWER: score.submitted_answer,
-            const.SCORE_SUBMITTED_CODE: score.submitted_code,
-            const.SCORE_CURRENT_POINTS: score.current_points,
-            const.SCORE_HINT_USED: score.hint_used
-        }
-
+        new_score = trans.score_to_document(score)
         result = self.__scores.insert_one(new_score)
         score.score_id = str(result.inserted_id)
-
-    def is_correct_login(self, username: str, password: str, *, should_hash: bool = True) -> bool:
-        """
-        Verifies that the given username and password match a group document
-
-        :param username: The group's display name
-        :param password: The group's password
-        :param should_hash: Whether or not the given password should be hashed before comparison
-        :return: True if the login is correct
-        """
-        if should_hash:
-            password = self.__hash_password(password)
-
-        return self.__groups.count_documents({
-            const.ID_KEY: username.upper(),
-            const.GROUP_PASSWORD: password
-        }) > 0
 
     def get_group_scores(self, group_name: str) -> model.ScoreList:
         """
@@ -183,3 +210,79 @@ class MongoCodejamDB(CodejamDB):
         score = self.__scores.find_one({const.SCORE_GROUP_ID: group_name.upper(),
                                         const.SCORE_PROBLEM_ID: problem_name.upper()})
         return trans.document_to_score(score)
+
+    def edit_score(self, group_name: str, problem_name: str, updated_score: model.Score):
+        """
+        Update an existing score's fields
+
+        :param group_name: Group's name or ID (name converted to ID)
+        :param problem_name: Problem's name or ID (name converted to ID)
+        :param updated_score: The new score object
+        """
+        updated_document = trans.score_to_document(updated_score)
+
+        self.__scores.replace_one({const.SCORE_GROUP_ID: group_name.upper(),
+                                   const.SCORE_PROBLEM_ID: problem_name.upper()},
+                                  updated_document)
+
+    def submit_answer(self, group_name: str, problem_name: str, answer: str, code: str) -> bool:
+        """
+        Submit an answer, update accordingly in the DB
+
+        :param group_name: The name / ID of the group submitting
+        :param problem_name: The name / ID of the problem
+        :param answer: The answer the group is submitting
+        :param code: The group's code for the problem, for validation
+        :return: True if the answer was correct
+        """
+        problem = trans.document_to_problem(self.__problems.find_one({const.ID_KEY: problem_name.upper()}))
+        score = trans.document_to_score(self.__scores.find_one({const.SCORE_GROUP_ID: group_name.upper(),
+                                                                const.SCORE_PROBLEM_ID: problem_name.upper()}))
+        correct_answer = problem.answer == answer
+        points = problem.points if correct_answer else 0
+        if score.hint_used:
+            points *= self.HINT_USED_PERCENTAGE
+
+        # TODO: Change scores to support submission list instead of most recent
+        score.current_points = points
+        score.submitted_answer = answer
+        score.submitted_code = code
+
+        self.__scores.replace_one({const.SCORE_GROUP_ID: group_name.upper(),
+                                  const.SCORE_PROBLEM_ID: problem_name.upper()},
+                                  trans.score_to_document(score))
+        return correct_answer
+
+    def use_hint(self, group_name: str, problem_name: str) -> str:
+        """
+        Gets the hint for the given problem while saving that the group used it
+
+        :param group_name: The group's name / ID
+        :param problem_name: The problem's name / ID
+        :return: The hint for the problem, None if the problem has no hint
+        """
+        hint = self.__problems.find_one({const.ID_KEY: problem_name.upper()},
+                                        {const.PROBLEM_HINT: True})[const.PROBLEM_HINT]
+
+        if hint:
+            self.__scores.update_one({const.SCORE_GROUP_ID: group_name.upper(),
+                                      const.SCORE_PROBLEM_ID: problem_name.upper()},
+                                     {"$set": {const.SCORE_HINT_USED: True}})
+        return hint
+
+    def is_correct_login(self, username: str, password: str, *, should_hash: bool = True) -> bool:
+        """
+        Verifies that the given username and password match a group document
+
+        :param username: The group's display name
+        :param password: The group's password
+        :param should_hash: Whether or not the given password should be hashed before comparison
+        :return: True if the login is correct
+        """
+        if should_hash:
+            password = self.__hash_password(password)
+
+        return self.__groups.count_documents({
+            const.ID_KEY: username.upper(),
+            const.GROUP_PASSWORD: password
+        }) > 0

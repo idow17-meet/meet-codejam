@@ -97,6 +97,15 @@ class CodejamDB(ABC):
         pass
 
     @abstractmethod
+    def delete_problem(self, problem_name: str):
+        """
+        Deletes a problem using its name / ID
+
+        :param problem_name: Problem's name or ID (name converted to ID)
+        """
+        pass
+
+    @abstractmethod
     def add_score(self, score: model.Score):
         """
         Adds a score instance of the given problem for the given group
@@ -125,22 +134,25 @@ class CodejamDB(ABC):
         pass
 
     # The following may not be needed:
+    # Added in case manual changes are required (disqualifying an answer, etc)
     @abstractmethod
-    def edit_score(self, score_id: str, updated_score: model.Score):
+    def edit_score(self, group_name: str, problem_name: str, updated_score: model.Score):
         """
         Update an existing score's fields
 
-        :param score_id: The score's unique ID
+        :param group_name: Group's name or ID (name converted to ID)
+        :param problem_name: Problem's name or ID (name converted to ID)
         :param updated_score: The new score object
         """
         pass
 
     @abstractmethod
-    def submit_answer(self, group_name: str, answer: str, code: str) -> bool:
+    def submit_answer(self, group_name: str, problem_name: str, answer: str, code: str) -> bool:
         """
         Submit an answer, update accordingly in the DB
 
         :param group_name: The name / ID of the group submitting
+        :param problem_name: The name / ID of the problem
         :param answer: The answer the group is submitting
         :param code: The group's code for the problem, for validation
         :return: True if the answer was correct
