@@ -40,5 +40,7 @@ export default {
 <style lang="scss" scoped>
 .navbar {
   margin-bottom: 60px;
+  font-family: 'ArcherPro';
+  font-weight: bold;
 }
 </style>

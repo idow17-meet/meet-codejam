@@ -20,9 +20,12 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+@import '~@/assets/styles/font-registration.scss';
+
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'Proxima Nova';
+  font-weight: 600;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
