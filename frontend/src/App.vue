@@ -2,8 +2,6 @@
   <div id="app">
     <navbar></navbar>
     <div class="container-fluid">
-      <img src="./assets/logo.png">
-      <p>lol</p>
       <router-view/>
     </div>
   </div>
@@ -21,10 +19,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/styles/_variables.scss";
 @import '~@/assets/styles/font-registration.scss';
-
-$bg-color: #0D435B;
-$bg-color-dark: #092B3A;
 
 #app {
   font-family: 'Proxima Nova';
@@ -32,7 +28,8 @@ $bg-color-dark: #092B3A;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: white;
+  font-size: 16pt;
 
   background: url('~@/assets/img/bg-pattern.png'), $bg-color;
   background: url('~@/assets/img/bg-pattern.png'), -webkit-linear-gradient(to left, $bg-color, $bg-color-dark);

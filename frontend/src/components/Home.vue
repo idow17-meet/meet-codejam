@@ -1,0 +1,128 @@
+<template>
+<div>
+  <!-- Title and user -->
+  <div class="row">
+    <div class="col-10 offset-1">
+      <span class="logo">me<i>e</i>t codejam 2018</span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-10 offset-1">
+      <h2 id="usernameheader">Hello, {{ user }}</h2>
+    </div>
+  </div>
+
+  <!-- Problems -->
+  <div class="row">
+    <div class="col-12 col-md-10 offset-md-1 offset-0">
+      <table class="table table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th>No.</th>
+            <th>Name</th>
+            <th>Difficulty</th>
+            <th>Score</th>
+            <th>State</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Fill with ScoreItems -->
+          <score-item v-for="score in scores" :key="score.position" :score="score"></score-item>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</template>
+
+<script>
+import ScoreItem from './ScoreItem'
+
+export default {
+  name: 'Home',
+  data: function () {
+    return {
+      // Static placeholder values until backend integration
+      user: 'Danny',
+      scores: [
+        // Score #1
+        {
+          state: 'Not Done',
+          problem: {
+            id: 1,
+            name: 'Factorials Factory',
+            difficulty: 10,
+            points: 8000
+          },
+          currentPoints: 0,
+          position: 1
+        },
+        // Score #2
+        {
+          state: 'Not Done',
+          problem: {
+            id: 2,
+            name: 'Palindromic Number',
+            difficulty: 37,
+            points: 18700
+          },
+          currentPoints: 0,
+          position: 2
+        },
+        // Score #3
+        {
+          state: 'Not Done',
+          problem: {
+            id: 3,
+            name: 'Ladder Climbing',
+            difficulty: 75,
+            points: 37000
+          },
+          currentPoints: 0,
+          position: 3
+        }
+      ]
+    }
+  },
+  components: {ScoreItem}
+}
+</script>
+
+<style lang="scss" scoped>
+@import "~@/assets/styles/_variables.scss";
+
+.logo {
+  font-family: ArcherPro;
+  position: relative;
+  font-size: 60px;
+  color: $brand-teal;
+}
+
+.logo i {
+  font-size: 100%;
+  font-family: ArcherPro;
+  -webkit-transform: translateZ(0) scaleX(-1);
+  -moz-transform: translateZ(0) scaleX(-1);
+  -ms-transform: translateZ(0) scaleX(-1);
+  -o-transform: translateZ(0) scaleX(-1);
+  transform: translateZ(0) scaleX(-1);
+  filter: FlipH;
+  display: inline-block;
+  line-height: inherit;
+}
+
+i {
+  font-style: normal;
+}
+
+table {
+  background-color: white;
+  color: black;
+}
+
+.table .thead-dark th {
+  border-top-color: #181818;
+  background-color: #181818;
+}
+</style>
