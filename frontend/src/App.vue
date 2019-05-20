@@ -7,20 +7,18 @@
   </div>
 </template>
 
-<script>
-import Navbar from './components/Navbar'
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
+import Navbar from '@/components/Navbar.vue';
 
-export default {
-  name: 'App',
-  components: {
-    Navbar
-  }
+@Component({components: { Navbar }})
+export default class App extends Vue {
 }
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/styles/_variables.scss";
-@import '~@/assets/styles/font-registration.scss';
+@import "@/assets/styles/_variables.scss";
+@import '@/assets/styles/font-registration.scss';
 
 #app {
   font-family: 'Proxima Nova';

@@ -36,56 +36,54 @@
 </div>
 </template>
 
-<script>
-import ScoreItem from './ScoreItem'
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator';
+import ScoreItem from '@/components/ScoreItem.vue';
+import { Dictionary } from 'vue-router/types/router';
 
-export default {
-  name: 'Home',
-  data: function () {
-    return {
-      // Static placeholder values until backend integration
-      user: 'Danny',
-      scores: [
-        // Score #1
-        {
-          state: 'Not Done',
-          problem: {
-            id: 1,
-            name: 'Factorials Factory',
-            difficulty: 10,
-            points: 8000
-          },
-          currentPoints: 0,
-          position: 1
-        },
-        // Score #2
-        {
-          state: 'Not Done',
-          problem: {
-            id: 2,
-            name: 'Palindromic Number',
-            difficulty: 37,
-            points: 18700
-          },
-          currentPoints: 0,
-          position: 2
-        },
-        // Score #3
-        {
-          state: 'Not Done',
-          problem: {
-            id: 3,
-            name: 'Ladder Climbing',
-            difficulty: 75,
-            points: 37000
-          },
-          currentPoints: 0,
-          position: 3
-        }
-      ]
-    }
-  },
-  components: {ScoreItem}
+@Component({components: {ScoreItem}})
+export default class Home extends Vue {
+  // Static placeholder values until backend integration
+  public user: string = 'Danny';
+  // Score class / interface to be added
+  public scores: any = [
+    // Score #1
+    {
+      state: 'Not Done',
+      problem: {
+        id: 1,
+        name: 'Factorials Factory',
+        difficulty: 10,
+        points: 8000,
+      },
+      currentPoints: 0,
+      position: 1,
+    },
+    // Score #2
+    {
+      state: 'Not Done',
+      problem: {
+        id: 2,
+        name: 'Palindromic Number',
+        difficulty: 37,
+        points: 18700,
+      },
+      currentPoints: 0,
+      position: 2,
+    },
+    // Score #3
+    {
+      state: 'Not Done',
+      problem: {
+        id: 3,
+        name: 'Ladder Climbing',
+        difficulty: 75,
+        points: 37000,
+      },
+      currentPoints: 0,
+      position: 3,
+    },
+  ];
 }
 </script>
 

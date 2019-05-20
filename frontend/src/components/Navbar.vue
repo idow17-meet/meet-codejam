@@ -31,9 +31,12 @@
   </nav>
 </template>
 
-<script>
-export default {
-  name: 'Navbar'
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
+
+@Component
+export default class Navbar extends Vue {
+  public name = 'navbar';
 }
 </script>
 

@@ -14,25 +14,26 @@
 </tr>
 </template>
 
-<script>
-let sliderRed = '#eb7575'
-let sliderOrange = '#fac878'
-let sliderGreen = '#9bf79b'
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator';
 
-export default {
-  name: 'ScoreItem',
-  props: ['score'],
-  computed: {
-    sliderColor: function () {
-      let difficulty = this.score.problem.difficulty
-      if (difficulty < 25) {
-        return sliderGreen
-      } else if (difficulty < 50) {
-        return sliderOrange
-      }
+const sliderRed = '#eb7575';
+const sliderOrange = '#fac878';
+const sliderGreen = '#9bf79b';
 
-      return sliderRed
+@Component({'name': 'score-item'})
+export default class ScoreItem extends Vue {
+  @Prop() public score!: any;
+
+  get sliderColor() {
+    const difficulty = this.score.problem.difficulty;
+    if (difficulty < 25) {
+      return sliderGreen;
+    } else if (difficulty < 50) {
+      return sliderOrange;
     }
+
+    return sliderRed;
   }
 }
 </script>
