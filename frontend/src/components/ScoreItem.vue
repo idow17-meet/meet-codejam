@@ -21,7 +21,7 @@ const sliderRed = '#eb7575';
 const sliderOrange = '#fac878';
 const sliderGreen = '#9bf79b';
 
-@Component({'name': 'score-item'})
+@Component
 export default class ScoreItem extends Vue {
   @Prop() public score!: any;
 
