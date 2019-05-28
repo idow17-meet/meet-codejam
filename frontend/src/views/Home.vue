@@ -2,7 +2,7 @@
 <div>
   <!-- Title and user -->
   <div class="row">
-    <div class="col-10 offset-1">
+    <div class="col-12 col-md-10 offset-0 offset-md-1">
       <span class="logo">me<i>e</i>t codejam 2018</span>
     </div>
   </div>
@@ -14,7 +14,7 @@
 
   <!-- Problems -->
   <div class="row">
-    <div class="col-12 col-md-10 offset-md-1 offset-0">
+    <div class="table-responsive offset-md-1 col-md-10">
       <table class="table table-hover">
         <thead class="thead-dark">
           <tr>
