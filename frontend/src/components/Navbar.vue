@@ -1,6 +1,6 @@
 <template>
   <nav class='navbar navbar-expand-lg navbar-dark container bg-dark navigation col-12'>
-    <a class='navbar-brand' style='color: #34afb0' href='#broken'>meet codejam</a>
+    <router-link class='navbar-brand' :to="{name: 'home'}" exact>meet codejam</router-link>
     <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarsExample09' aria-controls='navbarsExample09'
       aria-expanded='false' aria-label='Toggle navigation'>
       <span class='navbar-toggler-icon'></span>
@@ -12,7 +12,7 @@
           <a class='nav-link' href='#broken'>leaderboard</a>
         </li>
           <li class='nav-item'>
-            <a class='nav-link' href='#broken'>problems</a>
+            <router-link class='nav-link' :to="{name: 'home'}" exact>problems</router-link>
           </li>
           <li class='nav-item'>
             <a class='nav-link' href='#broken'>team</a>
@@ -41,9 +41,15 @@ export default class Navbar extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/styles/_variables.scss";
+
 .navbar {
   margin-bottom: 60px;
   font-family: 'ArcherPro';
   font-weight: bold;
+}
+
+a.navbar-brand, a.navbar-brand:focus{
+  color: $brand-teal;
 }
 </style>

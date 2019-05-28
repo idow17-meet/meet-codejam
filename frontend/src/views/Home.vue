@@ -3,7 +3,7 @@
   <!-- Title and user -->
   <div class="row">
     <div class="col-12 col-md-10 offset-0 offset-md-1">
-      <span class="logo">me<i>e</i>t codejam 2018</span>
+      <span class="logo">me<i>e</i>t codejam 2019</span>
     </div>
   </div>
   <div class="row">
@@ -39,7 +39,6 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import ScoreItem from '@/components/ScoreItem.vue';
-import { Dictionary } from 'vue-router/types/router';
 
 @Component({components: {ScoreItem}})
 export default class Home extends Vue {

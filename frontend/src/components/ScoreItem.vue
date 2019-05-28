@@ -2,7 +2,7 @@
 <tr>
   <td>{{ score.position }}</td>
   <td>
-    <a href=#broken>{{ score.problem.name }}</a>
+    <router-link :to="{name: 'viewProblem', params: {problemId: score.problem.id}}">{{ score.problem.name }}</router-link>
   </td>
   <td class='difficulty-row'>
     <div class='difficulty-container'>
