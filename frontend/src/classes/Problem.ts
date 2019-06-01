@@ -4,8 +4,7 @@ export default class Problem  {
     public difficulty: number,
     public description: string,
     public points: number,
-    public answer: string,
-    public problemId: string,
+    public id: string,
     public hint?: string,
   ) {}
 }

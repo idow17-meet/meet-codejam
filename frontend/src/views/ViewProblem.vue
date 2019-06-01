@@ -74,8 +74,8 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import Problem from '@/class/Problem.ts';
-import Group from '@/class/Group.ts';
+import Problem from '@/classes/Problem';
+import Group from '@/classes/Group';
 
 @Component
 export default class ViewProblem extends Vue {

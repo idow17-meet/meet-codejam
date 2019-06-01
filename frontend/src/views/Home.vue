@@ -39,49 +39,45 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import ScoreItem from '@/components/ScoreItem.vue';
+import Score from '@/classes/Score';
+import Problem from '@/classes/Problem';
 
 @Component({components: {ScoreItem}})
 export default class Home extends Vue {
   // Static placeholder values until backend integration
   public user: string = 'Danny';
   // Score class / interface to be added
-  public scores: any = [
+  public scores: Score[] = [
     // Score #1
-    {
-      state: 'Not Done',
-      problem: {
-        id: 1,
-        name: 'Factorials Factory',
-        difficulty: 10,
-        points: 8000,
-      },
-      currentPoints: 0,
-      position: 1,
-    },
+    new Score (
+      new Problem (
+        'Factorials Factory',
+        10,
+        'Some description',
+        8000,
+        '1',
+      ),
+    ),
     // Score #2
-    {
-      state: 'Not Done',
-      problem: {
-        id: 2,
-        name: 'Palindromic Number',
-        difficulty: 37,
-        points: 18700,
-      },
-      currentPoints: 0,
-      position: 2,
-    },
-    // Score #3
-    {
-      state: 'Not Done',
-      problem: {
-        id: 3,
-        name: 'Ladder Climbing',
-        difficulty: 75,
-        points: 37000,
-      },
-      currentPoints: 0,
-      position: 3,
-    },
+    new Score (
+      new Problem (
+        'Palindromic Number',
+        37,
+        'Some description noitpircsed emoS',
+        18700,
+        '2',
+      ),
+    ),
+    new Score (
+      new Problem (
+        'Ladder Climbing',
+        75,
+        '#Some\n#Description\n#Here',
+        37000,
+        '3',
+      ),
+      1200
+    ),
   ];
 }
 </script>
