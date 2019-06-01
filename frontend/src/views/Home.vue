@@ -27,7 +27,7 @@
         </thead>
         <tbody>
           <!-- Fill with ScoreItems -->
-          <score-item v-for="score in scores" :key="score.position" :score="score"></score-item>
+          <score-item v-for="score in scores" :key="score.problem.id" :score="score"></score-item>
         </tbody>
       </table>
     </div>
@@ -76,7 +76,7 @@ export default class Home extends Vue {
         37000,
         '3',
       ),
-      1200
+      37000,
     ),
   ];
 }

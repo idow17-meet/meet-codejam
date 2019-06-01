@@ -1,5 +1,5 @@
 <template>
-<tr>
+<tr :class="rowClass">
   <td>{{ score.position }}</td>
   <td>
     <router-link :to="{name: 'viewProblem', params: {problemId: score.problem.id}}">{{ score.problem.name }}</router-link>
@@ -16,14 +16,19 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
+import Score from '@/classes/Score';
 
 const sliderRed = '#eb7575';
 const sliderOrange = '#fac878';
 const sliderGreen = '#9bf79b';
 
+const rowClassMapping: any = {'Strike (Max Score)': 'table-success',
+                              'Split (Partial Score)': 'table-warning',
+                              'Not Done': ''};
+
 @Component
 export default class ScoreItem extends Vue {
-  @Prop() public score!: any;
+  @Prop() public score!: Score;
 
   get sliderColor() {
     const difficulty = this.score.problem.difficulty;
@@ -34,6 +39,10 @@ export default class ScoreItem extends Vue {
     }
 
     return sliderRed;
+  }
+
+  get rowClass() {
+    return rowClassMapping[this.score.state];
   }
 }
 </script>
