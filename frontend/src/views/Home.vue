@@ -27,7 +27,7 @@
         </thead>
         <tbody>
           <!-- Fill with ScoreItems -->
-          <score-item v-for="score in $store.getters.scores" :key="score.problem.id" :score="score"></score-item>
+          <score-item v-for="(score, index) in $store.getters.scores" :key="score.problem.id" :score="score" :number="index + 1"></score-item>
         </tbody>
       </table>
     </div>
@@ -46,10 +46,6 @@ import Problem from '@/classes/Problem'
 export default class Home extends Vue {
   // Static placeholder values until backend integration
   public user: string = 'Danny'
-
-  private beforeCreate() {
-    this.$store.dispatch('fetchScores')
-  }
 }
 </script>
 

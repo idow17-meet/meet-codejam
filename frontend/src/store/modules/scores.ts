@@ -28,7 +28,7 @@ const tempScores = [
     new Problem (
       'Ladder Climbing',
       75,
-      '#Some\n#Description\n#Here',
+      '#Some<br>#Description<br>#Here',
       37000,
       '3',
     ),

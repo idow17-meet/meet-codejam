@@ -76,17 +76,14 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import Problem from '@/classes/Problem'
 import Group from '@/classes/Group'
+import Score from '@/classes/Score'
 
 @Component
 export default class ViewProblem extends Vue {
-    @Prop() private problemId!: string
-    private  problem: Problem = new Problem(
-        'Some Problem',
-        42,
-        'This is verry hard <strong>lol</strong>',
-        133700,
-        'YEET',
-        'SOME PROBLEM')
+    @Prop() private number!: number
+    private score: Score = this.$store.getters.scores[this.number - 1]
+    private problem: Problem = this.score.problem
+
     private groupsSolved: Group[] = [new Group('The Cool kidz', ['Ashley', 'John'], 'lmao')]
 }
 </script>

@@ -1,8 +1,8 @@
 <template>
 <tr :class="rowClass">
-  <td>{{ score.position }}</td>
+  <td>{{ number }}</td>
   <td>
-    <router-link :to="{name: 'viewProblem', params: {problemId: score.problem.id}}">{{ score.problem.name }}</router-link>
+    <router-link :to="{name: 'viewProblem', params: {number: number}}">{{ score.problem.name }}</router-link>
   </td>
   <td class='difficulty-row'>
     <div class='difficulty-container'>
@@ -29,6 +29,7 @@ const rowClassMapping: any = {'Strike (Max Score)': 'table-success',
 @Component
 export default class ScoreItem extends Vue {
   @Prop() public score!: Score
+  @Prop() public number!: number
 
   get sliderColor() {
     const difficulty = this.score.problem.difficulty

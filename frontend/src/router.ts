@@ -1,9 +1,11 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import Router, { Route } from 'vue-router'
+import store from './store'
 import Home from './views/Home.vue'
 import ViewProblem from './views/ViewProblem.vue'
 
 Vue.use(Router)
+
 
 export default new Router({
   mode: 'history',
@@ -15,10 +17,27 @@ export default new Router({
       component: Home,
     },
     {
-      path: '/problem/:problemId',
+      path: '/problem/:number',
       name: 'viewProblem',
       component: ViewProblem,
       props: true,
+      beforeEnter: (to, from, next) => {
+        function isValid(param: number) {
+           return param <= store.getters.scores.length && param >= 1
+        }
+
+        if (!isValid(Number(to.params.scoreIndex))) {
+          next('404')
+        }
+
+        next()
+       },
+    },
+     // TODO: Add 404 instead of redirecting home
+    {
+      path: '*',
+      name: 'notFound',
+      redirect: {name: 'home'},
     },
   ],
 })
