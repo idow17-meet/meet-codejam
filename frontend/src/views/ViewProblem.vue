@@ -73,21 +73,21 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import Problem from '@/classes/Problem';
-import Group from '@/classes/Group';
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import Problem from '@/classes/Problem'
+import Group from '@/classes/Group'
 
 @Component
 export default class ViewProblem extends Vue {
-    @Prop() private problemId!: string;
+    @Prop() private problemId!: string
     private  problem: Problem = new Problem(
         'Some Problem',
         42,
         'This is verry hard <strong>lol</strong>',
         133700,
         'YEET',
-        'SOME PROBLEM');
-    private groupsSolved: Group[] = [new Group('The Cool kidz', ['Ashley', 'John'], 'lmao')];
+        'SOME PROBLEM')
+    private groupsSolved: Group[] = [new Group('The Cool kidz', ['Ashley', 'John'], 'lmao')]
 }
 </script>
 

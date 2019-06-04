@@ -15,34 +15,34 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import Score from '@/classes/Score';
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import Score from '@/classes/Score'
 
-const sliderRed = '#eb7575';
-const sliderOrange = '#fac878';
-const sliderGreen = '#9bf79b';
+const sliderRed = '#eb7575'
+const sliderOrange = '#fac878'
+const sliderGreen = '#9bf79b'
 
 const rowClassMapping: any = {'Strike (Max Score)': 'table-success',
                               'Split (Partial Score)': 'table-warning',
-                              'Not Done': ''};
+                              'Not Done': ''}
 
 @Component
 export default class ScoreItem extends Vue {
-  @Prop() public score!: Score;
+  @Prop() public score!: Score
 
   get sliderColor() {
-    const difficulty = this.score.problem.difficulty;
+    const difficulty = this.score.problem.difficulty
     if (difficulty < 25) {
-      return sliderGreen;
+      return sliderGreen
     } else if (difficulty < 50) {
-      return sliderOrange;
+      return sliderOrange
     }
 
-    return sliderRed;
+    return sliderRed
   }
 
   get rowClass() {
-    return rowClassMapping[this.score.state];
+    return rowClassMapping[this.score.state]
   }
 }
 </script>

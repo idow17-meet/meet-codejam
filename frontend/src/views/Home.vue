@@ -37,15 +37,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import ScoreItem from '@/components/ScoreItem.vue';
-import Score from '@/classes/Score';
-import Problem from '@/classes/Problem';
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import ScoreItem from '@/components/ScoreItem.vue'
+import Score from '@/classes/Score'
+import Problem from '@/classes/Problem'
 
 @Component({components: {ScoreItem}})
 export default class Home extends Vue {
   // Static placeholder values until backend integration
-  public user: string = 'Danny';
+  public user: string = 'Danny'
   // Score class / interface to be added
   public scores: Score[] = [
     // Score #1
@@ -78,7 +78,7 @@ export default class Home extends Vue {
       ),
       37000,
     ),
-  ];
+  ]
 }
 </script>
 

@@ -1,9 +1,9 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import Home from './views/Home.vue';
-import ViewProblem from './views/ViewProblem.vue';
+import Vue from 'vue'
+import Router from 'vue-router'
+import Home from './views/Home.vue'
+import ViewProblem from './views/ViewProblem.vue'
 
-Vue.use(Router);
+Vue.use(Router)
 
 export default new Router({
   mode: 'history',
@@ -21,4 +21,4 @@ export default new Router({
       props: true,
     },
   ],
-});
+})

@@ -8,8 +8,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import Navbar from '@/components/Navbar.vue';
+import { Vue, Component } from 'vue-property-decorator'
+import Navbar from '@/components/Navbar.vue'
 
 @Component({components: { Navbar }})
 export default class App extends Vue {
@@ -17,7 +17,7 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/styles/_variables.scss";
+@import '@/assets/styles/_variables.scss';
 @import '@/assets/styles/font-registration.scss';
 
 #app {

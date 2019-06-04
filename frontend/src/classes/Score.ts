@@ -1,4 +1,4 @@
-import Problem from '@/classes/Problem';
+import Problem from '@/classes/Problem'
 
 export default class Score {
   constructor(
@@ -12,11 +12,11 @@ export default class Score {
 
   get state() {
     if (this.currentPoints === 0) {
-      return 'Not Done';
+      return 'Not Done'
     } else if (this.currentPoints === this.problem.points) {
-      return 'Strike (Max Score)';
+      return 'Strike (Max Score)'
     } else {
-      return 'Split (Partial Score)';
+      return 'Split (Partial Score)'
     }
   }
 }
