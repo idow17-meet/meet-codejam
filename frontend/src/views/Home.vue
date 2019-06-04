@@ -27,7 +27,7 @@
         </thead>
         <tbody>
           <!-- Fill with ScoreItems -->
-          <score-item v-for="score in scores" :key="score.problem.id" :score="score"></score-item>
+          <score-item v-for="score in $store.getters.scores" :key="score.problem.id" :score="score"></score-item>
         </tbody>
       </table>
     </div>
@@ -46,39 +46,10 @@ import Problem from '@/classes/Problem'
 export default class Home extends Vue {
   // Static placeholder values until backend integration
   public user: string = 'Danny'
-  // Score class / interface to be added
-  public scores: Score[] = [
-    // Score #1
-    new Score (
-      new Problem (
-        'Factorials Factory',
-        10,
-        'Some description',
-        8000,
-        '1',
-      ),
-    ),
-    // Score #2
-    new Score (
-      new Problem (
-        'Palindromic Number',
-        37,
-        'Some description noitpircsed emoS',
-        18700,
-        '2',
-      ),
-    ),
-    new Score (
-      new Problem (
-        'Ladder Climbing',
-        75,
-        '#Some\n#Description\n#Here',
-        37000,
-        '3',
-      ),
-      37000,
-    ),
-  ]
+
+  private beforeCreate() {
+    this.$store.dispatch('fetchScores')
+  }
 }
 </script>
 
