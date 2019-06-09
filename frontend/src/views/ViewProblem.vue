@@ -74,9 +74,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import Problem from '@/classes/Problem'
-import Group from '@/classes/Group'
-import Score from '@/classes/Score'
+import { Group, Problem, Score } from '@/classes'
 
 @Component
 export default class ViewProblem extends Vue {

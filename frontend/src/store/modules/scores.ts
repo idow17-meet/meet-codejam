@@ -1,6 +1,5 @@
 import { Module } from 'vuex'
-import Score from '@/classes/Score'
-import Problem from '@/classes/Problem'
+import { Score, Problem } from '@/classes'
 
 // Static scores here until rest api integration
 const tempScores = [

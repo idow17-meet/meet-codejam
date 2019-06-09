@@ -1,4 +1,4 @@
-export default class Problem  {
+export class Problem  {
   constructor(
     public name: string,
     public difficulty: number,

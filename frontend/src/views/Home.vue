@@ -39,8 +39,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import ScoreItem from '@/components/ScoreItem.vue'
-import Score from '@/classes/Score'
-import Problem from '@/classes/Problem'
+import { Score, Problem } from '@/classes'
 
 @Component({components: {ScoreItem}})
 export default class Home extends Vue {

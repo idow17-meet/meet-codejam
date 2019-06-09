@@ -1,6 +1,6 @@
-import Problem from '@/classes/Problem'
+import { Problem } from '@/classes'
 
-export default class Score {
+export class Score {
   constructor(
     public problem: Problem,
     public currentPoints: number = 0,

@@ -26,7 +26,7 @@ export default new Router({
            return param <= store.getters.scores.length && param >= 1
         }
 
-        if (!isValid(Number(to.params.scoreIndex))) {
+        if (!isValid(Number(to.params.number))) {
           next('404')
         }
 
