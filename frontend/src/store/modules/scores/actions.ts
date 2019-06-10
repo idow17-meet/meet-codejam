@@ -1,4 +1,6 @@
-import { Module } from 'vuex'
+import { ActionTree } from 'vuex'
+import { ScoresState } from './types'
+import { RootState } from '@/store/types'
 import { Score, Problem } from '@/classes'
 
 // Static scores here until rest api integration
@@ -35,35 +37,8 @@ const tempScores = [
   ),
 ]
 
-
-// Actual module
-const state = {
-  scores: [],
-}
-
-const mutations = {
-  setScores(state: any, scores: Score[]) {
-    state.scores = scores
-  },
-}
-
-const actions = {
-  fetchScores(context: any) {
+export const actions: ActionTree<ScoresState, RootState> = {
+  fetchScores(context) {
     context.commit('setScores', tempScores)
   },
 }
-
-const getters = {
-  scores: (state: any) => {
-    return state.scores
-  },
-}
-
-const scoreModule: Module<any, any> = {
-  state,
-  mutations,
-  actions,
-  getters,
-}
-
-export default scoreModule

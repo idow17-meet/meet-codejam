@@ -8,7 +8,7 @@
   </div>
   <div class="row">
     <div class="col-10 offset-1">
-      <h2 id="usernameheader">Hello, {{ user }}</h2>
+      <h2 id="usernameheader">Hello, {{ $store.getters.group.name }}</h2>
     </div>
   </div>
 
