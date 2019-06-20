@@ -3,7 +3,7 @@ import { UserState } from './types'
 import { RootState } from '@/store/types'
 
 export const getters: GetterTree<UserState, RootState> = {
-    group: (state) => {
-        return state.group
+    userGroup: (state, getters, rootState, rootGetters) => {
+        return rootGetters['groups/group'](state.groupId)
     },
 }

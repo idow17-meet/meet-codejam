@@ -1,23 +1,22 @@
 import { Module } from 'vuex'
 import { RootState } from '@/store/types'
-import { UserState } from './types'
+import { GroupsState } from './types'
 import { mutations } from './mutations'
 import { actions } from './actions'
 import { getters } from './getters'
 
-
-const tempGroupId = 'THE UNICORNS'
-
-
-const state: UserState = {
-  groupId: tempGroupId,
+const state: GroupsState = {
+  groups: [],
 }
 
-const userModule: Module<UserState, RootState> = {
+const namespaced: boolean = true
+
+const groupsModule: Module<GroupsState, RootState> = {
   state,
   mutations,
   actions,
   getters,
+  namespaced,
 }
 
-export default userModule
+export default groupsModule

@@ -10,11 +10,11 @@ const state: ScoresState = {
   scores: [],
 }
 
-const userModule: Module<ScoresState, RootState> = {
+const scoresModule: Module<ScoresState, RootState> = {
   state,
   mutations,
   actions,
   getters,
 }
 
-export default userModule
+export default scoresModule

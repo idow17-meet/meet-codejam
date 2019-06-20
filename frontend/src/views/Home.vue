@@ -8,7 +8,7 @@
   </div>
   <div class="row">
     <div class="col-10 offset-1">
-      <h2 id="usernameheader">Hello, {{ $store.getters.group.name }}</h2>
+      <h2 id="usernameheader">Hello, {{ groupName }}</h2>
     </div>
   </div>
 
@@ -43,8 +43,7 @@ import { Score, Problem } from '@/classes'
 
 @Component({components: {ScoreItem}})
 export default class Home extends Vue {
-  // Static placeholder values until backend integration
-  public user: string = 'Danny'
+  private groupName = this.$store.getters.userGroup.name
 }
 </script>
 

@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Vuex, { StoreOptions } from 'vuex'
 import { RootState } from '@/store/types'
-import scoreModule from './modules/scores'
+import scoresModule from './modules/scores'
 import userModule from './modules/user'
+import groupsModule from './modules/groups'
 
 Vue.use(Vuex)
 
@@ -11,8 +12,9 @@ const storeOptions: StoreOptions<RootState> = {
     version: '1.0.0',
   },
   modules: {
-    scoreModule,
-    userModule,
+    scores: scoresModule,
+    user: userModule,
+    groups: groupsModule,
   },
 }
 
@@ -23,18 +25,20 @@ if (module.hot) {
   module.hot.accept(['./modules/scores'], () => {
     // require the updated modules
     // have to add .default here due to babel 6 module output
-    const scoreModule = require('./modules/scores').default
+    const scoresModule = require('./modules/scores').default
     const userModule = require('./modules/user').default
+    const groupsModule = require('./modules/groups').default
     // swap in the new modules and mutations
     store.hotUpdate({
       modules: {
-        scoreModule,
-        userModule,
+        scores: scoresModule,
+        user: userModule,
+        groups: groupsModule,
       },
     })
   })
 }
 
 store.dispatch('fetchScores')
-
+store.dispatch('groups/fetchGroups')
 export default store
