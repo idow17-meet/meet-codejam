@@ -7,7 +7,7 @@ import { actions } from './actions'
 import { getters } from './getters'
 
 const state: ScoresState = {
-  scores: [],
+  scores: {},
 }
 
 const scoresModule: Module<ScoresState, RootState> = {

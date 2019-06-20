@@ -79,7 +79,7 @@ import { Group, Problem, Score } from '@/classes'
 @Component
 export default class ViewProblem extends Vue {
     @Prop() private number!: number
-    private score: Score = this.$store.getters.scores[this.number - 1]
+    private score: Score = this.$store.getters.userScores[this.number - 1]
     private problem: Problem = this.score.problem
 
     private groupsSolved: Group[] = [new Group('The Cool kidz', ['Ashley', 'John'], 'lmao')]
