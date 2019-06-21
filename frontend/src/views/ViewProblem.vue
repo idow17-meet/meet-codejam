@@ -66,7 +66,7 @@
     <div class="row" style="margin-top: 40px;">
         <div class="col-md-6 offset-md-3">
             <h3>Solved by:</h3>
-            <h4 v-for="group in groupsSolved" :key="group.groupId"><a href="#broken">{{ group.name }}</a></h4>
+            <h4 v-for="group in groupsSolved" :key="group.name"><router-link :to="{name: 'groupProfile', params: {name: group.name}}">{{ group.name }}</router-link></h4>
         </div>
     </div>
 </div>
@@ -82,7 +82,7 @@ export default class ViewProblem extends Vue {
     private score: Score = this.$store.getters.userScores[this.number - 1]
     private problem: Problem = this.score.problem
 
-    private groupsSolved: Group[] = [new Group('The Cool kidz', ['Ashley', 'John'], 'lmao')]
+    private groupsSolved: Group[] = this.$store.getters['groups/solvedProblem'](this.problem.name)
 }
 </script>
 

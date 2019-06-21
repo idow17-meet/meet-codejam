@@ -15,7 +15,7 @@
             <router-link class='nav-link' :to="{name: 'home'}" exact>problems</router-link>
           </li>
           <li class='nav-item'>
-            <a class='nav-link' href='#broken'>team</a>
+            <router-link class='nav-link' :to="{name: 'groupProfile', params: {name: $store.getters.userGroup.name}}">team</router-link>
           </li>
       </ul>
       <ul class='navbar-nav ml-auto'>

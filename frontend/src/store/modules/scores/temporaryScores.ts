@@ -21,6 +21,7 @@ const tempScores = [
       18700,
       '2',
     ),
+    9350,
   ),
   new Score (
     new Problem (
