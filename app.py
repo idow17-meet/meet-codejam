@@ -1,37 +1,18 @@
-from flask import Flask, render_template
-import requests
+from fastapi import FastAPI
+from starlette.staticfiles import StaticFiles
+import uvicorn
 
 from backend.api import api
 
 
-class VueFlask(Flask):
-    jinja_options = Flask.jinja_options.copy()
-    jinja_options.update(dict(
-        block_start_string='[%',
-        block_end_string='%]',
-        variable_start_string='[[',
-        variable_end_string=']]',
-        comment_start_string='[#',
-        comment_end_string='#]',
-    ))
+app = FastAPI()
+app.include_router(api, prefix='/api')
 
-
-# Blueprints
-
-app = VueFlask(__name__,
-               static_folder='./dist/static',
-               template_folder='./dist')
-
-app.register_blueprint(api)
-
-
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def index(path):
-    if app.debug:
-        return requests.get(f'http://localhost:8080/{path}').text
-    return render_template("index.html")
+static_files = StaticFiles(directory='./dist/static')
+html_index = StaticFiles(directory='./dist', html=True)
+app.mount('/static', static_files)
+app.mount('/', html_index)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    uvicorn.run('app:app', host='127.0.0.1', port=5000, reload=True, debug=True)

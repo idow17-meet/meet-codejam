@@ -15,7 +15,7 @@ from hashlib import sha512
 from copy import deepcopy
 
 import backend.database.model as model
-from backend.database.framework import CodejamDB
+from backend.database.codejam_db import CodejamDB
 import backend.database.mongo.consts as const
 import backend.database.mongo.translations as trans
 
@@ -41,7 +41,7 @@ class MongoCodejamDB(CodejamDB):
         # TODO: When deploying, replace this with an environment variable
         self.__password_salt = 'b32197fwqgfFWEIO014jfx-a?'
 
-    def __hash_password(self, password: str) -> str:
+    def __hash_password(self, password: str) -> bytes:
         """
         Hashes the password using sha512
         :param password:
@@ -49,7 +49,7 @@ class MongoCodejamDB(CodejamDB):
         """
         return sha512(password.encode() + self.__password_salt.encode()).digest()
 
-    def add_group(self, group: model.Group):
+    def add_group(self, group: model.InGroup):
         """
         Adds the group in the database, including adding score records. Sets the group instance's group_id
 
@@ -58,16 +58,13 @@ class MongoCodejamDB(CodejamDB):
         if self.__groups.count_documents({const.ID_KEY: group.name.upper()}) > 0:
             raise ValueError("Group with given name already exists")
 
-        group_copy = deepcopy(group)  # In order to avoid changing the original group's password field
-        # Hash password if in plaintext
-        if not isinstance(group_copy.password, bytes):
-            group_copy.password = self.__hash_password(group_copy.password)
-
-        new_group = trans.group_to_document(group_copy)
+        group_dict = group.dict()
+        group_dict[const.GROUP_PASSWORD] = self.__hash_password(group_dict[const.GROUP_PASSWORD])
+        db_group = model.DBGroup(**group_dict)
+        new_group = trans.group_to_document(db_group)
 
         # Insert and store the returned mongo-created ID in the dataclass
-        result = self.__groups.insert_one(new_group)
-        group.group_id = str(result.inserted_id)  # str is required to transform from ObjectId to str
+        self.__groups.insert_one(new_group)
 
         # Add all score instances for this group
         # Note: Consider generating scores and adding in bulk
@@ -75,15 +72,16 @@ class MongoCodejamDB(CodejamDB):
             problem_id = str(problem[const.ID_KEY])
             self.add_score(model.Score(group.group_id, problem_id))
 
-    def get_group(self, group_name: str) -> model.Group:
+    def get_group(self, group_name: str) -> model.DBGroup:
         """
         Retrieves a group using its name / ID
 
         :param group_name: Group's name or ID (name converted to ID)
         :return: The corresponding group
         """
-        document = self.__groups.find({const.ID_KEY: group_name.upper()})
-        return trans.document_to_group(document)
+        document = self.__groups.find_one({const.ID_KEY: group_name.upper()})
+        if document:
+            return trans.document_to_group(document)
 
     def get_all_groups(self) -> model.GroupList:
         """
@@ -93,7 +91,7 @@ class MongoCodejamDB(CodejamDB):
         """
         return [trans.document_to_group(document) for document in self.__groups.find()]
 
-    def edit_group(self, group_name: str, updated_group: model.Group):
+    def edit_group(self, group_name: str, updated_group: model.DBGroup):
         """
         Modify an existing group
 
@@ -146,8 +144,9 @@ class MongoCodejamDB(CodejamDB):
         :param problem_name: Problem's name or ID (name converted to ID)
         :return: The corresponding group
         """
-        document = self.__problems.find({const.ID_KEY: problem_name.upper()})
-        return trans.document_to_problem(document)
+        document = self.__problems.find_one({const.ID_KEY: problem_name.upper()})
+        if document:
+            return trans.document_to_problem(document)
 
     def get_all_problems(self) -> model.ProblemList:
         """
@@ -209,7 +208,8 @@ class MongoCodejamDB(CodejamDB):
         """
         score = self.__scores.find_one({const.SCORE_GROUP_ID: group_name.upper(),
                                         const.SCORE_PROBLEM_ID: problem_name.upper()})
-        return trans.document_to_score(score)
+        if score:
+            return trans.document_to_score(score)
 
     def edit_score(self, group_name: str, problem_name: str, updated_score: model.Score):
         """

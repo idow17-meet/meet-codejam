@@ -30,20 +30,19 @@ def document_to_score(document: dict) -> model.Score:
     )
 
 
-def document_to_group(document: dict) -> model.Group:
+def document_to_group(document: dict) -> model.DBGroup:
     """
     Creates a group instance from a document
 
     :param document: The document to create an instance from
     :return: The matching group instance
     """
-    return model.Group(
+    return model.DBGroup(
         name=document[const.GROUP_NAME],
         members=document[const.GROUP_MEMBERS],
         password=document[const.GROUP_PASSWORD],
         hidden=document[const.GROUP_HIDDEN],
         admin=document[const.GROUP_ADMIN],
-        group_id=document[const.ID_KEY]
     )
 
 
@@ -89,7 +88,7 @@ def score_to_document(score: model.Score) -> dict:
     return document
 
 
-def group_to_document(group: model.Group) -> dict:
+def group_to_document(group: model.DBGroup) -> dict:
     """
     Converts a group instance to a mongo document
     :param group: The group instance to convert

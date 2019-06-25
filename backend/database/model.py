@@ -1,19 +1,34 @@
 from typing import List
-from dataclasses import dataclass
+from pydantic import BaseModel
 
 
-@dataclass
-class Group:
+class GroupBase(BaseModel):
     name: str
     members: List[str]
-    password: str
+
+    @property
+    def group_id(self) -> str:
+        return self.name.upper()
+
+
+class DetailedGroup(GroupBase):
     hidden: bool = False
     admin: bool = False
-    group_id: str = None
 
 
-@dataclass
-class Problem:
+class OutGroup(GroupBase):
+    pass
+
+
+class InGroup(DetailedGroup):
+    password: str
+
+
+class DBGroup(DetailedGroup):
+    password: bytes
+
+
+class Problem(BaseModel):
     name: str
     difficulty: int
     description: str
@@ -23,8 +38,7 @@ class Problem:
     problem_id: str = None
 
 
-@dataclass
-class Score:
+class Score(BaseModel):
     group_id: str
     problem_id: str
     current_points: float = 0
@@ -34,6 +48,6 @@ class Score:
     score_id: str = None
 
 
-GroupList = List[Group]
+GroupList = List[DBGroup]
 ProblemList = List[Problem]
 ScoreList = List[Score]

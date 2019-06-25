@@ -12,7 +12,7 @@ class CodejamDB(ABC):
     """
 
     @abstractmethod
-    def add_group(self, group: model.Group):
+    def add_group(self, group: model.InGroup):
         """
         Adds the group in the database, including adding score records. Sets the group instance's group_id
 
@@ -21,7 +21,7 @@ class CodejamDB(ABC):
         pass
 
     @abstractmethod
-    def get_group(self, group_name: str) -> model.Group:
+    def get_group(self, group_name: str) -> model.DBGroup:
         """
         Retrieves a group using its name / ID
 
@@ -40,7 +40,7 @@ class CodejamDB(ABC):
         pass
 
     @abstractmethod
-    def edit_group(self, group_name: str, updated_group: model.Group):
+    def edit_group(self, group_name: str, updated_group: model.InGroup):
         """
         Modify an existing group
 
