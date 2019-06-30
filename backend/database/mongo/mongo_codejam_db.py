@@ -12,7 +12,6 @@ version of the group / problem's name (since the name is unique, and this makes 
 
 from pymongo import MongoClient
 from hashlib import sha512
-from copy import deepcopy
 
 import backend.database.model as model
 from backend.database.codejam_db import CodejamDB
@@ -70,7 +69,7 @@ class MongoCodejamDB(CodejamDB):
         # Note: Consider generating scores and adding in bulk
         for problem in self.__problems.find():
             problem_id = str(problem[const.ID_KEY])
-            self.add_score(model.Score(group.group_id, problem_id))
+            self.add_score(model.DBScore(group_id=group.group_id, problem_id=problem_id))
 
     def get_group(self, group_name: str) -> model.DBGroup:
         """
@@ -99,9 +98,6 @@ class MongoCodejamDB(CodejamDB):
         :param updated_group: The modified group
         """
         updated_document = trans.group_to_document(updated_group)
-        # Hash password if in plaintext
-        if not isinstance(updated_group.password, bytes):
-            updated_document[const.GROUP_PASSWORD] = self.__hash_password(updated_group.password)
 
         self.__groups.remove({const.ID_KEY: group_name.upper()})
         self.__groups.insert_one(updated_document)
@@ -135,7 +131,7 @@ class MongoCodejamDB(CodejamDB):
         # Add score instances for all groups
         for group in self.__groups.find():
             group_id = group[const.ID_KEY]
-            self.add_score(model.Score(group_id, problem.problem_id))
+            self.add_score(model.DBScore(group_id=group_id, problem_id=problem.problem_id))
 
     def get_problem(self, problem_name: str) -> model.Problem:
         """
@@ -180,7 +176,7 @@ class MongoCodejamDB(CodejamDB):
         self.__problems.remove({const.ID_KEY: problem_name.upper()})
         self.__scores.remove({const.SCORE_PROBLEM_ID: problem_name.upper()})
 
-    def add_score(self, score: model.Score):
+    def add_score(self, score: model.DBScore):
         """
         Adds a score instance of the given problem for the given group
 
@@ -199,7 +195,7 @@ class MongoCodejamDB(CodejamDB):
         score_documents = self.__scores.find({const.SCORE_GROUP_ID: group_name.upper()})
         return [trans.document_to_score(document) for document in score_documents]
 
-    def get_group_score(self, group_name: str, problem_name: str) -> model.Score:
+    def get_group_score(self, group_name: str, problem_name: str) -> model.DBScore:
         """
         Get the group's score for the given problem
         :param group_name: Group's name or ID (name converted to ID)
@@ -211,7 +207,7 @@ class MongoCodejamDB(CodejamDB):
         if score:
             return trans.document_to_score(score)
 
-    def edit_score(self, group_name: str, problem_name: str, updated_score: model.Score):
+    def edit_score(self, group_name: str, problem_name: str, updated_score: model.DBScore):
         """
         Update an existing score's fields
 

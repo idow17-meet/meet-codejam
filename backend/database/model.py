@@ -12,19 +12,23 @@ class GroupBase(BaseModel):
 
 
 class DetailedGroup(GroupBase):
+    """ Meant for the admin dashboard """
     hidden: bool = False
     admin: bool = False
 
 
 class OutGroup(GroupBase):
+    """ Meant for responses to normal users """
     pass
 
 
 class InGroup(DetailedGroup):
+    """ Meant for inserting groups to the DB """
     password: str
 
 
 class DBGroup(DetailedGroup):
+    """ Fully detailed group as stored in the DB """
     password: bytes
 
 
@@ -38,16 +42,20 @@ class Problem(BaseModel):
     problem_id: str = None
 
 
-class Score(BaseModel):
+class ScoreBase(BaseModel):
     group_id: str
     problem_id: str
     current_points: float = 0
+    hint_used: bool = False
+
+
+class DBScore(ScoreBase):
+    """ Fully detailed score as stored in the DB"""
     submitted_answer: str = None
     submitted_code: str = None
-    hint_used: bool = False
     score_id: str = None
 
 
 GroupList = List[DBGroup]
 ProblemList = List[Problem]
-ScoreList = List[Score]
+ScoreList = List[DBScore]

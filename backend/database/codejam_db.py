@@ -106,7 +106,7 @@ class CodejamDB(ABC):
         pass
 
     @abstractmethod
-    def add_score(self, score: model.Score):
+    def add_score(self, score: model.DBScore):
         """
         Adds a score instance of the given problem for the given group
 
@@ -124,7 +124,7 @@ class CodejamDB(ABC):
         pass
 
     @abstractmethod
-    def get_group_score(self, group_name: str, problem_id: str) -> model.Score:
+    def get_group_score(self, group_name: str, problem_id: str) -> model.DBScore:
         """
         Gets the group's score entity
 
@@ -136,7 +136,7 @@ class CodejamDB(ABC):
     # The following may not be needed:
     # Added in case manual changes are required (disqualifying an answer, etc)
     @abstractmethod
-    def edit_score(self, group_name: str, problem_name: str, updated_score: model.Score):
+    def edit_score(self, group_name: str, problem_name: str, updated_score: model.DBScore):
         """
         Update an existing score's fields
 

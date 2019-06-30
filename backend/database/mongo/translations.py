@@ -12,14 +12,14 @@ import backend.database.mongo.consts as const
 ##
 
 
-def document_to_score(document: dict) -> model.Score:
+def document_to_score(document: dict) -> model.DBScore:
     """
     Creates a score instance from a document
 
     :param document: The document to create an instance from
     :return: The matching score instance
     """
-    return model.Score(
+    return model.DBScore(
         group_id=str(document[const.SCORE_GROUP_ID]),
         problem_id=str(document[const.SCORE_PROBLEM_ID]),
         current_points=document.get(const.SCORE_CURRENT_POINTS, 0),
@@ -68,7 +68,7 @@ def document_to_problem(document: dict) -> model.Problem:
 ##
 
 
-def score_to_document(score: model.Score) -> dict:
+def score_to_document(score: model.DBScore) -> dict:
     """
     Converts a score instance to a mongo document
     :param score: The score instance to convert
