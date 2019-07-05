@@ -8,7 +8,7 @@ export const getters: GetterTree<GroupsState, RootState> = {
         if (!groupName) {
             return null
         }
-        return state.groups.find((group) => group.id === groupName.toUpperCase())
+        return state.groups.find((group) => group.name.toUpperCase() === groupName.toUpperCase())
     },
     allGroups: (state) => state.groups,
     solvedProblem: (state, getters, rootState, rootGetters) => (problemName: string) => {

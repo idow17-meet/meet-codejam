@@ -69,7 +69,11 @@ async def login(*, username: str = Body(...), password: str = Body(...), respons
     if authenticated:
         token = create_token_cookie(data={'sub': username})
         response.set_cookie(key='session', value=token)
-    return {'success': authenticated}
+        return {'success': True, 'groupId': username.upper()}
+    raise HTTPException(
+        status_code=HTTP_401_UNAUTHORIZED,
+        detail="Invalid username or password"
+    )
 
 
 @auth.post('/logout')

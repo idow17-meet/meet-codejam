@@ -6,11 +6,8 @@ import { actions } from './actions'
 import { getters } from './getters'
 
 
-const tempGroupId = 'THE UNICORNS'
-
-
 const state: UserState = {
-  groupId: tempGroupId,
+  groupId: null,
 }
 
 const userModule: Module<UserState, RootState> = {

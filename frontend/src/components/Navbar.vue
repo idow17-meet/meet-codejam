@@ -8,23 +8,22 @@
 
     <div class='collapse navbar-collapse' id='navbarsExample09'>
       <ul class='navbar-nav mr-auto'>
-        <li class='nav-item'>
-          <a class='nav-link' href='#broken'>leaderboard</a>
-        </li>
+        <template v-if="$store.getters.userLoggedIn">
+          <li class='nav-item'>
+            <a class='nav-link' href='#broken'>leaderboard</a>
+          </li>
           <li class='nav-item'>
             <router-link class='nav-link' :to="{name: 'home'}" exact>problems</router-link>
           </li>
           <li class='nav-item'>
             <router-link class='nav-link' :to="{name: 'groupProfile', params: {name: $store.getters.userGroup.name}}">team</router-link>
           </li>
+        </template>
       </ul>
       <ul class='navbar-nav ml-auto'>
         <li class='nav-item'>
-          <!-- {% if session['user_id'] %} -->
-          <a class='nav-link' href='#broken'>sign out</a>
-          <!-- {% else %}
-          <a class='nav-link' href='#broken'>sign in</a>
-          {%endif%} -->
+          <a v-if="$store.getters.userLoggedIn" class='nav-link' href="/logout" @click.prevent.once="logout">sign out</a>
+          <router-link v-else class='nav-link' :to="{name: 'login'}">login</router-link>
         </li>
       </ul>
     </div>
@@ -36,7 +35,12 @@ import { Vue, Component } from 'vue-property-decorator'
 
 @Component
 export default class Navbar extends Vue {
-  public name = 'navbar'
+  private logout() {
+    this.$store.dispatch('logout')
+    .then((response) => {
+      this.$router.push('login')
+    })
+  }
 }
 </script>
 

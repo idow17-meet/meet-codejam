@@ -10,9 +10,22 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import Navbar from '@/components/Navbar.vue'
+import store from '@/store'
+import router from '@/router'
+import { AxiosError } from 'axios'
 
 @Component({components: { Navbar }})
 export default class App extends Vue {
+  // Add hook to redirect to login page if received 401 (unauthorized)
+  private beforeCreate() {
+    this.$http.interceptors.response.use((response) => response, (err: AxiosError<any>) => {
+      if (err.response && err.response.status === 401) {
+        store.dispatch('logout')
+        router.push('login')
+      }
+      return Promise.reject(err)
+    })
+  }
 }
 </script>
 

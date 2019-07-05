@@ -4,10 +4,11 @@ import store from './store'
 import Home from './views/Home.vue'
 import ViewProblem from './views/ViewProblem.vue'
 import GroupProfile from './views/GroupProfile.vue'
+import Login from './views/Login.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -51,6 +52,14 @@ export default new Router({
         next()
        },
     },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login,
+      meta: {
+        public: true,
+      },
+    },
      // TODO: Add 404 instead of redirecting home
     {
       path: '*',
@@ -59,3 +68,17 @@ export default new Router({
     },
   ],
 })
+
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.public) {
+    next()
+  }
+  // Require auth
+  if (!store.getters.userLoggedIn) {
+    next('login')
+  }
+  next()
+})
+
+export default router

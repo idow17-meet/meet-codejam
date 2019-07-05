@@ -5,7 +5,7 @@ import { Group } from '@/classes'
 
 // Default constant group until backend integration
 const defaultGroups = [new Group('The Unicorns', ['Yousef', 'Mariah', 'Daniel', 'Yael'], 'THE UNICORNS'),
-                       new Group('Awesomers', ['Yossi', 'Abed', 'Kobi', 'Ahmad'], 'AWESOMERS')]
+                       new Group('My Group', ['Yossi', 'Abed', 'Kobi', 'Ahmad'], 'AWESOMERS')]
 
 
 export const actions: ActionTree<GroupsState, RootState> = {

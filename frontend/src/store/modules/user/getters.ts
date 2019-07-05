@@ -13,4 +13,7 @@ export const getters: GetterTree<UserState, RootState> = {
             return []
         }
     },
+    userLoggedIn: (state) => {
+        return state.groupId != null
+    },
 }
