@@ -22,7 +22,7 @@
       </ul>
       <ul class='navbar-nav ml-auto'>
         <li class='nav-item'>
-          <a v-if="$store.getters.userLoggedIn" class='nav-link' href="/logout" @click.prevent.once="logout">sign out</a>
+          <a v-if="$store.getters.userLoggedIn" class='nav-link' href="#empty" @click.prevent.once="logout">sign out</a>
           <router-link v-else class='nav-link' :to="{name: 'login'}">login</router-link>
         </li>
       </ul>
@@ -38,7 +38,7 @@ export default class Navbar extends Vue {
   private logout() {
     this.$store.dispatch('logout')
     .then((response) => {
-      this.$router.push('login')
+      this.$router.push({name: 'login'})
     })
   }
 }

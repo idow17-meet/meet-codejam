@@ -17,6 +17,15 @@ export const actions: ActionTree<UserState, RootState> = {
     })
   },
   logout(context) {
-    context.commit('logout')
+    return new Promise((resolve, reject) => {
+      axios.post('/api/auth/logout')
+      .then((response) => {
+        context.commit('logout')
+        resolve(response)
+      })
+      .catch((err) => {
+        reject(err)
+      })
+    })
   },
 }
