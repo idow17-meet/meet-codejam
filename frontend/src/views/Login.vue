@@ -40,7 +40,7 @@ export default class Login extends Vue {
 
   private login() {
     this.loading = true
-    this.$store.dispatch('login', {username: this.username, password: this.password})
+    this.$store.dispatch('user/login', {username: this.username, password: this.password})
     .then((resp) => {
       this.loading = false
       this.error = false

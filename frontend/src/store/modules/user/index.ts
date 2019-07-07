@@ -10,11 +10,14 @@ const state: UserState = {
   groupId: null,
 }
 
+const namespaced = true
+
 const userModule: Module<UserState, RootState> = {
   state,
   mutations,
   actions,
   getters,
+  namespaced
 }
 
 export default userModule

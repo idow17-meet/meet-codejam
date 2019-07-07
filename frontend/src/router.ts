@@ -24,7 +24,7 @@ const router = new Router({
       props: true,
       beforeEnter: (to, from, next) => {
         function isValid(param: number) {
-           return param <= store.getters.userScores.length && param >= 1
+           return param <= store.getters['user/scores'].length && param >= 1
         }
 
         if (!isValid(Number(to.params.number))) {
@@ -75,7 +75,7 @@ router.beforeEach((to, from, next) => {
     next()
   }
   // Require auth
-  if (!store.getters.userLoggedIn) {
+  if (!store.getters['user/loggedIn']) {
     next('login')
   }
   next()

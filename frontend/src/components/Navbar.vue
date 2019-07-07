@@ -8,7 +8,7 @@
 
     <div class='collapse navbar-collapse' id='navbarsExample09'>
       <ul class='navbar-nav mr-auto'>
-        <template v-if="$store.getters.userLoggedIn">
+        <template v-if="$store.getters['user/loggedIn']">
           <li class='nav-item'>
             <a class='nav-link' href='#broken'>leaderboard</a>
           </li>
@@ -16,13 +16,13 @@
             <router-link class='nav-link' :to="{name: 'home'}" exact>problems</router-link>
           </li>
           <li class='nav-item'>
-            <router-link class='nav-link' :to="{name: 'groupProfile', params: {name: $store.getters.userGroup.name}}">team</router-link>
+            <router-link class='nav-link' :to="{name: 'groupProfile', params: {name: $store.getters['user/group'].name}}">team</router-link>
           </li>
         </template>
       </ul>
       <ul class='navbar-nav ml-auto'>
         <li class='nav-item'>
-          <a v-if="$store.getters.userLoggedIn" class='nav-link' href="#empty" @click.prevent.once="logout">sign out</a>
+          <a v-if="$store.getters['user/loggedIn']" class='nav-link' href="#empty" @click.prevent.once="logout">sign out</a>
           <router-link v-else class='nav-link' :to="{name: 'login'}">login</router-link>
         </li>
       </ul>

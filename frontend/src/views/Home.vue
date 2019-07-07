@@ -27,7 +27,7 @@
         </thead>
         <tbody>
           <!-- Fill with ScoreItems -->
-          <score-item v-for="(score, index) in $store.getters.userScores" :key="score.problem.id" :score="score" :number="index + 1"></score-item>
+          <score-item v-for="(score, index) in $store.getters['user/scores']" :key="score.problem.id" :score="score" :number="index + 1"></score-item>
         </tbody>
       </table>
     </div>
@@ -43,7 +43,7 @@ import { Score, Problem } from '@/classes'
 
 @Component({components: {ScoreItem}})
 export default class Home extends Vue {
-  private groupName = this.$store.getters.userGroup.name
+  private groupName = this.$store.getters['user/group'].name
 }
 </script>
 

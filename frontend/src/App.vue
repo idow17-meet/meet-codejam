@@ -20,7 +20,7 @@ export default class App extends Vue {
   private beforeCreate() {
     this.$http.interceptors.response.use((response) => response, (err: AxiosError<any>) => {
       if (err.response && err.response.status === 401) {
-        store.dispatch('logout')
+        store.dispatch('user/logout')
         router.push('login')
       }
       return Promise.reject(err)
