@@ -2,6 +2,11 @@ from typing import List
 from pydantic import BaseModel
 
 
+def to_camel(string: str) -> str:
+    words = string.split('_')
+    return words[0] + ''.join(word.capitalize() for word in words[1:])
+
+
 class GroupBase(BaseModel):
     name: str
     members: List[str]
@@ -20,6 +25,10 @@ class DetailedGroup(GroupBase):
 class OutGroup(GroupBase):
     """ Meant for responses to normal users """
     pass
+
+    class Config:
+        allow_population_by_alias = True
+        alias_generator = to_camel
 
 
 class InGroup(DetailedGroup):
@@ -41,6 +50,10 @@ class Problem(BaseModel):
     hint: str = None
     problem_id: str = None
 
+    class Config:
+        allow_population_by_alias = True
+        alias_generator = to_camel
+
 
 class ScoreBase(BaseModel):
     group_id: str
@@ -54,6 +67,15 @@ class DBScore(ScoreBase):
     submitted_answer: str = None
     submitted_code: str = None
     score_id: str = None
+
+
+class OutScore(ScoreBase):
+    """ The score as outputted to the user """
+    problem: Problem
+
+    class Config:
+        allow_population_by_alias = True
+        alias_generator = to_camel
 
 
 GroupList = List[DBGroup]

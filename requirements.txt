@@ -5,5 +5,5 @@ fastapi==0.30.0
 starlette==0.12.0
 uvicorn==0.8.2
 aiofiles==0.4.0
-pydantic==0.28
+pydantic==0.30
 PyJWT==1.7.1
