@@ -4,8 +4,8 @@ import { RootState } from '@/store/types'
 
 
 export const mutations: MutationTree<UserState> = {
-  login(state, groupId) {
-    state.groupId = groupId
+  login(state, groupId: string) {
+    state.groupId = groupId.toUpperCase()
   },
   logout(state) {
     state.groupId = null

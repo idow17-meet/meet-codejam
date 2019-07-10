@@ -17,7 +17,7 @@ const userModule: Module<UserState, RootState> = {
   mutations,
   actions,
   getters,
-  namespaced
+  namespaced,
 }
 
 export default userModule

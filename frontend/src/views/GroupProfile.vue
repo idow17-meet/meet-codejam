@@ -26,7 +26,7 @@ import SolvedBadge from '@/components/SolvedBadge.vue'
 export default class GroupProfile extends Vue {
   @Prop() private name!: string
   private group: Group = this.$store.getters['groups/group'](this.name)
-  private solvedScores: Score[] = this.$store.getters.solvedScores(this.name)
+  private solvedScores: Score[] = this.$store.getters['scores/solved'](this.name)
 }
 </script>
 

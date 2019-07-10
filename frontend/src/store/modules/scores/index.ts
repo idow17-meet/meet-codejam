@@ -10,11 +10,14 @@ const state: ScoresState = {
   scores: {},
 }
 
+const namespaced = true
+
 const scoresModule: Module<ScoresState, RootState> = {
   state,
   mutations,
   actions,
   getters,
+  namespaced,
 }
 
 export default scoresModule

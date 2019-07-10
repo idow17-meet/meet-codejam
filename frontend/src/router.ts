@@ -42,7 +42,7 @@ const router = new Router({
       // Validate group exists
       beforeEnter: (to, from, next) => {
         function isValid(name: string) {
-           return name.toUpperCase() in store.getters.scores && store.getters['groups/group'](name)
+           return name.toUpperCase() in store.getters['scores/all'] && store.getters['groups/group'](name)
         }
 
         if (!isValid(to.params.name)) {

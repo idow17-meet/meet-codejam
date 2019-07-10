@@ -1,7 +1,7 @@
 <template>
 <div class="solved-badge">
   <div class="solved-badge-title">
-    <router-link :to="{name: 'viewProblem', params: {number: $store.getters.getScorePosition(score.problem.name)}}"><h3>{{ score.problem.name }} <i class="fa fa-check" aria-hidden="true"></i></h3></router-link>
+    <router-link :to="{name: 'viewProblem', params: {number: $store.getters['score/getPosition'](score.problem.name)}}"><h3>{{ score.problem.name }} <i class="fa fa-check" aria-hidden="true"></i></h3></router-link>
   </div>
   <div class="solved-badge-content">
     <p>Score: {{ score.currentPoints }} / {{ score.problem.points }}</p>

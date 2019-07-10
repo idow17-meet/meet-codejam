@@ -8,12 +8,12 @@ export const getters: GetterTree<GroupsState, RootState> = {
         if (!groupName) {
             return null
         }
-        return state.groups.find((group) => group.name.toUpperCase() === groupName.toUpperCase())
+        return state.groups.find((group) => group.id === groupName.toUpperCase())
     },
     allGroups: (state) => state.groups,
     solvedProblem: (state, getters, rootState, rootGetters) => (problemName: string) => {
         const groups: Group[] = []
-        const scores = rootGetters.scores
+        const scores = rootGetters['scores/all']
 
         for (const groupId in scores) {
             if (scores[groupId].find((score: Score) => score.problem.name === problemName &&

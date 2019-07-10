@@ -1,14 +1,29 @@
-import { Problem } from '@/classes'
+import { Problem, IProblem } from '@/classes'
+
+
+export interface IScore {
+  problem: IProblem | Problem
+  currentPoints?: number
+  hintUsed?: boolean
+  submittedAnswer?: string
+  submittedCode?: string
+}
+
 
 export class Score {
-  constructor(
-    public problem: Problem,
-    public currentPoints: number = 0,
-    public hintUsed: boolean = false,
-    public submittedAnswer?: string,
-    public submittedCode?: string,
-    public scoreId?: string,
-  ) {}
+  public problem: Problem
+  public currentPoints: number
+  public hintUsed: boolean
+  public submittedAnswer?: string
+  public submittedCode?: string
+
+  constructor(score: IScore) {
+    this.problem = new Problem(score.problem)
+    this.currentPoints = score.currentPoints || 0
+    this.hintUsed = score.hintUsed || false
+    this.submittedAnswer = score.submittedAnswer
+    this.submittedCode = score.submittedCode
+  }
 
   get state() {
     if (this.currentPoints === 0) {

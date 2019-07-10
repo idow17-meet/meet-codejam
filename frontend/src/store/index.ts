@@ -39,6 +39,5 @@ if (module.hot) {
   })
 }
 
-store.dispatch('fetchScores')
 store.dispatch('groups/fetchGroups')
 export default store
