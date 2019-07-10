@@ -17,7 +17,6 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Score, ScoreState} from '@/classes'
-import { Dictionary } from 'vuex';
 
 const sliderRed = '#eb7575'
 const sliderOrange = '#fac878'
