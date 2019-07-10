@@ -28,17 +28,16 @@
   </div>
 
   <div class="row">
-    <div class="col-md-3"></div>
-    <div class="col-md-6">
-        <div class="hint-div">
+    <div class="col-md-6 offset-md-3" v-if="!solved">
+        <div class="hint-div" v-if="!score.hintUsed">
           <div class="row">
             <div class="col-md-2">
               <form  class="form justify-content-center" role="form" action="#broken">
-                <input style="margin-bottom: 10px;margin-top: 10px;" id="useHintBtn" type="submit" class="btn btn-sm btn-info" value="Use Hint">
+                <input id="useHintBtn" type="submit" class="btn btn-sm btn-info" value="Use Hint">
               </form>
             </div>
-            <div class="col-md-8">
-                <p class="hint-alert">You get Only Half Of the Points - {{ problem.points / 2 }}</p>
+            <div class="col-md-10">
+                <p class="hint-alert">Using a hint will limit the maximum points to: {{ problem.points / 2 }}</p>
             </div>
           </div>
         </div>
@@ -54,9 +53,10 @@
           </div>
           <input class="btn btn-info" type="submit"  value="Submit">
         </form>
-        <i class="fa fa-check" aria-hidden="true"></i>
     </div>
-    <div class="col-md-3"></div>
+    <div class="col-md-6 offset-md-3" v-if="solved">
+      <i class="fa fa-check" aria-hidden="true"></i>
+    </div>
   </div>
   <div class="row" style="margin-top: 40px;">
     <div class="col-md-6 offset-md-3">
@@ -69,13 +69,14 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { Group, Problem, Score } from '@/classes'
+import { Group, Problem, Score, ScoreState } from '@/classes'
 
 @Component
 export default class ViewProblem extends Vue {
   @Prop() private number!: number
   private score: Score = this.$store.getters['user/scores'][this.number - 1]
   private problem: Problem = this.score.problem
+  private solved: boolean = this.score.state !== ScoreState.NOT_DONE
 
   private groupsSolved: Group[] = this.$store.getters['groups/solvedProblem'](this.problem.name)
 }
@@ -96,5 +97,15 @@ div.problem {
 p.problem, .hint-alert {
   text-align: left;
   margin: 5px;
+}
+
+.hint-div {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.fa-check {
+  font-size: 160px;
+  color: rgb(119, 233, 119);
 }
 </style>

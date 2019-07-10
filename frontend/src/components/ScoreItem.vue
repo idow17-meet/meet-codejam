@@ -16,15 +16,16 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { Score } from '@/classes'
+import { Score, ScoreState} from '@/classes'
+import { Dictionary } from 'vuex';
 
 const sliderRed = '#eb7575'
 const sliderOrange = '#fac878'
 const sliderGreen = '#9bf79b'
 
-const rowClassMapping: any = {'Strike (Max Score)': 'table-success',
-                              'Split (Partial Score)': 'table-warning',
-                              'Not Done': ''}
+const rowClassMapping: {[key in ScoreState]: string} = {[ScoreState.MAX_SCORE]: 'table-success',
+                                                        [ScoreState.PARTIAL_SCORE]: 'table-warning',
+                                                        [ScoreState.NOT_DONE]: 'Not Done'}
 
 @Component
 export default class ScoreItem extends Vue {

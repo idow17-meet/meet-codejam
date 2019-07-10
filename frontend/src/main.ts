@@ -5,6 +5,7 @@ import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import store from './store'
 import Axios, { AxiosStatic } from 'axios'
+import '@fortawesome/fontawesome-free/js/all.js'
 
 
 Vue.config.productionTip = false

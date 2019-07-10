@@ -1,7 +1,9 @@
 <template>
 <div class="solved-badge">
   <div class="solved-badge-title">
-    <router-link :to="{name: 'viewProblem', params: {number: $store.getters['scores/getPosition'](score.problem.name)}}"><h3>{{ score.problem.name }} <i class="fa fa-check" aria-hidden="true"></i></h3></router-link>
+    <router-link :to="{name: 'viewProblem', params: {number: problemNumber}}">
+      <h3>{{ score.problem.name }} <i class="fa fa-check" aria-hidden="true"></i></h3>
+    </router-link>
   </div>
   <div class="solved-badge-content">
     <p>Score: {{ score.currentPoints }} / {{ score.problem.points }}</p>
@@ -17,6 +19,7 @@ import { Score } from '@/classes'
 @Component
 export default class SolvedBadge extends Vue {
   @Prop() public score!: Score
+  private problemNumber: number = this.$store.getters['scores/getPosition'](this.score.problem.name)
 }
 </script>
 

@@ -9,6 +9,11 @@ export interface IScore {
   submittedCode?: string
 }
 
+export enum ScoreState {
+  NOT_DONE = 'Not Done',
+  MAX_SCORE = 'Strike (Max Score)',
+  PARTIAL_SCORE = 'Split (Partial Score)',
+}
 
 export class Score {
   public problem: Problem
@@ -25,13 +30,13 @@ export class Score {
     this.submittedCode = score.submittedCode
   }
 
-  get state() {
+  get state(): ScoreState {
     if (this.currentPoints === 0) {
-      return 'Not Done'
+      return ScoreState.NOT_DONE
     } else if (this.currentPoints === this.problem.points) {
-      return 'Strike (Max Score)'
+      return ScoreState.MAX_SCORE
     } else {
-      return 'Split (Partial Score)'
+      return ScoreState.PARTIAL_SCORE
     }
   }
 }
