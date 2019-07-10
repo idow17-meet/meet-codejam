@@ -24,7 +24,8 @@ const router = new Router({
       props: true,
       beforeEnter: (to, from, next) => {
         function isValid(param: number) {
-           return param <= store.getters['user/scores'].length && param >= 1
+          const scores = store.getters['user/scores']
+          return scores && param <= scores.length && param >= 1
         }
 
         if (!isValid(Number(to.params.number))) {
