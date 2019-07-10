@@ -2,7 +2,6 @@ import { ActionTree } from 'vuex'
 import { ScoresState } from './types'
 import { RootState } from '@/store/types'
 import { Score, IScore, Problem } from '@/classes'
-import { tempScores, tempScores2 } from './temporaryScores'
 import axios from 'axios'
 
 

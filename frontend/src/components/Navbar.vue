@@ -36,7 +36,7 @@ import { Vue, Component } from 'vue-property-decorator'
 @Component
 export default class Navbar extends Vue {
   private logout() {
-    this.$store.dispatch('logout')
+    this.$store.dispatch('user/logout')
     .then((response) => {
       this.$router.push({name: 'login'})
     })

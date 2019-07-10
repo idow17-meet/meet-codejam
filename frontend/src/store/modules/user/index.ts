@@ -7,7 +7,7 @@ import { getters } from './getters'
 
 
 const state: UserState = {
-  groupId: null,
+  groupId: null || localStorage.getItem('groupId'),
 }
 
 const namespaced = true
