@@ -44,10 +44,6 @@ import { Score, Problem } from '@/classes'
 @Component({components: {ScoreItem}})
 export default class Home extends Vue {
   private groupName = this.$store.getters['user/group'].name
-
-  private beforeCreate() {
-    this.$store.dispatch('scores/fetchGroup', this.$store.getters['user/id'])
-  }
 }
 </script>
 

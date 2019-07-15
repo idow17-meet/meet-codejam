@@ -44,6 +44,7 @@ export default class Login extends Vue {
     .then((resp) => {
       this.loading = false
       this.error = false
+      this.$store.dispatch('scores/fetchGroup', this.$store.getters['user/id'])
       this.$router.push({name: 'home'})
     })
     .catch((err) => {

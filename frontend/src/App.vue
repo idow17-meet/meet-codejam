@@ -16,8 +16,8 @@ import { AxiosError } from 'axios'
 
 @Component({components: { Navbar }})
 export default class App extends Vue {
-  // Add hook to redirect to login page if received 401 (unauthorized)
   private beforeCreate() {
+    // Add hook to redirect to login page if received 401 (unauthorized)
     this.$http.interceptors.response.use((response) => response, (err: AxiosError<any>) => {
       if (err.response && err.response.status === 401) {
         store.dispatch('user/logout')
@@ -25,6 +25,11 @@ export default class App extends Vue {
       }
       return Promise.reject(err)
     })
+
+    // Load scores as soon as app loads if logged in
+    if (this.$store.getters['user/loggedIn']) {
+      this.$store.dispatch('scores/fetchGroup', this.$store.getters['user/id'])
+    }
   }
 }
 </script>
