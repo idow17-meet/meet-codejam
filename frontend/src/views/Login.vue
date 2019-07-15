@@ -17,7 +17,7 @@
           <input type="password" class="form-control" id="password" v-model="password" placeholder="Password">
         </div>
         <button type="submit" class="btn btn-primary">SUBMIT</button>
-        <message-box class="error" :messageType="'error'" v-if="error">{{ errorMsg }}</message-box>
+        <message-box class="error" messageType="error" v-if="error">{{ errorMsg }}</message-box>
         <footer>Don't have a password?<br> Raise your hand and wait for an instructor</footer>
       </form>
 
