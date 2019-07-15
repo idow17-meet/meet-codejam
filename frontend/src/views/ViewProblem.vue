@@ -113,11 +113,11 @@ export default class ViewProblem extends Vue {
           )
         })
         .catch((error) => {
-          if (error.response.status === 404){
+          if (error.response.status === 404) {
             Swal.fire(
               'No Available Hint',
               'This problem has no hint',
-              'error'
+              'error',
             )
           } else {
             this.error = error.response.data.detail
