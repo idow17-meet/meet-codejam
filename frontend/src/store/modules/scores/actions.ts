@@ -21,4 +21,7 @@ export const actions: ActionTree<ScoresState, RootState> = {
       })
     })
   },
+  setGroupScore(context, {groupName, score}: {groupName: string, score: Score}) {
+    context.commit('setGroupScore', {groupName, score})
+  },
 }
