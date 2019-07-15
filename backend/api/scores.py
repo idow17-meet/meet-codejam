@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Body
+from starlette.responses import Response
 from starlette.status import HTTP_404_NOT_FOUND
 from typing import List
 import logging
@@ -46,3 +47,22 @@ def get_group_score(group_name: str, problem_name: str, current_user: DBGroup = 
     problem = db_session.get_problem(problem_name)
     new_score = OutScore(**score.dict(), problem=problem)
     return new_score
+
+
+@scores.post('/{problem_name}')
+def submit_answer(problem_name: str,
+                  answer: str = Body(...),
+                  code: str = Body(...),
+                  current_user: DBGroup = Depends(get_current_user)):
+    db_session = get_db()
+    correct_answer = db_session.submit_answer(current_user.name, problem_name, answer, code)
+    return {"correct": correct_answer}
+
+
+@scores.patch('/{problem_name}/hint')
+def use_hint(problem_name: str, response: Response, current_user: DBGroup = Depends(get_current_user)):
+    db_session = get_db()
+    hint = db_session.use_hint(current_user.name, problem_name)
+    if not hint:
+        response.status_code = HTTP_404_NOT_FOUND
+    return {"hint": hint}
