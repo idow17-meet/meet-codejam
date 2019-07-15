@@ -36,9 +36,7 @@
                 <p class="hint-alert">Using a hint will limit the maximum points to: {{ problem.points / 2 }}</p>
             </div>
             <div class="col-md-1">
-              <form  class="form justify-content-center" role="form" action="#broken">
-                <input id="useHintBtn" type="submit" class="btn btn-sm btn-info" value="Use Hint">
-              </form>
+              <input type="submit" class="btn btn-sm btn-info" value="Use Hint" @click.prevent="useHint">
             </div>
           </div>
         </div>
@@ -89,6 +87,45 @@ export default class ViewProblem extends Vue {
   private code: string = ''
   private hint: string = ''
   private error: string = ''
+
+  private useHint() {
+    Swal.fire({
+      type: 'question',
+      title: 'Using A Hint',
+      text: 'Are you sure you want to use a hint?',
+      confirmButtonText: 'Yes, I\'m sure',
+      cancelButtonText: 'Cancel',
+      showCancelButton: true,
+      reverseButtons: true,
+      confirmButtonColor: '#aaaaaa',
+      cancelButtonColor: '#1471a7',
+    }).then((result) => {
+      if (result.value) {
+        this.$http.patch('/api/scores/' + this.problem.name + '/hint', {})
+        .then((response) => {
+          this.score.hintUsed = true
+          this.problem.hint = response.data.hint
+          this.error = ''
+          Swal.fire(
+            'Hint Used',
+            'Hint used successfully!',
+            'success',
+          )
+        })
+        .catch((error) => {
+          if (error.response.status === 404){
+            Swal.fire(
+              'No Available Hint',
+              'This problem has no hint',
+              'error'
+            )
+          } else {
+            this.error = error.response.data.detail
+          }
+        })
+      }
+    })
+  }
 
   private submitAnswer() {
     if (!this.isValidForm()) {
