@@ -77,7 +77,8 @@ def submit_answer(problem_name: str,
                   current_user: DBGroup = Depends(get_current_user)):
     db_session = get_db()
     correct_answer = db_session.submit_answer(current_user.name, problem_name, answer, code)
-    return {"correct": correct_answer}
+    points = db_session.get_group_score(current_user.name, problem_name).current_points if correct_answer else 0
+    return {"correct": correct_answer, "points": points}
 
 
 @scores.patch('/{problem_name}/hint')
