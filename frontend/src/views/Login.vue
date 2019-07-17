@@ -91,12 +91,12 @@ form button {
   border-radius: 0px;
   font-weight: bold;
   background-color: $brand-teal;
-  border-color: $brand-teal + 10;
+  border-color: lighten($brand-teal, 5%);
 }
 
 form button:hover {
-  background-color: $brand-teal + 30;
-  border-color: $brand-teal + 40;
+  background-color: lighten($brand-teal, 10%);
+  border-color: lighten($brand-teal, 15%);
 }
 
 footer {
