@@ -77,6 +77,8 @@ def submit_answer(problem_name: str,
                   current_user: DBGroup = Depends(get_current_user)):
     db_session = get_db()
     correct_answer = db_session.submit_answer(current_user.name, problem_name, answer, code)
+    if correct_answer:
+        logging.info(f'Group "{current_user.name}" just solved "{problem_name}"!')
     points = db_session.get_group_score(current_user.name, problem_name).current_points if correct_answer else 0
     return {"correct": correct_answer, "points": points}
 
@@ -87,4 +89,6 @@ def use_hint(problem_name: str, response: Response, current_user: DBGroup = Depe
     hint = db_session.use_hint(current_user.name, problem_name)
     if not hint:
         response.status_code = HTTP_404_NOT_FOUND
+    else:
+        logging.info(f'Group "{current_user.name}" used a hint for "{problem_name}"')
     return {"hint": hint}
