@@ -3,6 +3,8 @@ Defines the database interface in order to allow modularity
 """
 
 from abc import ABC, abstractmethod
+from typing import Dict, List
+
 import backend.database.model as model
 
 
@@ -130,6 +132,18 @@ class CodejamDB(ABC):
 
         :param group_name: Group's name or ID (name converted to ID)
         :param problem_id: The problem's ID
+        """
+        pass
+
+    @abstractmethod
+    def get_all_scores(self, solved_only: bool = False, excluded_groups: List[str] = None) \
+            -> Dict[str, model.ScoreList]:
+        """
+        Retrieves all of the scores in the database
+
+        :param solved_only: Whether only solved scores (points above 0) should be included, defaults to False
+        :param excluded_groups: A list of group names to exclude from the query, such as the current user
+        :return: A dictionary that maps group IDS to a list of their scores
         """
         pass
 

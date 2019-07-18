@@ -33,3 +33,7 @@ SCORE_HINT_USED = 'hint_used'
 
 # General mongo
 ID_KEY = '_id'
+
+
+# Aggregations
+SCORES_AGGREGATION = 'scores'
