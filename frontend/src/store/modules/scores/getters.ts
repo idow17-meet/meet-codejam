@@ -8,11 +8,19 @@ export const getters: GetterTree<ScoresState, RootState> = {
     return state.scores
   },
   solved: (state) => (groupName: string) => {
-    return state.scores[groupName.toUpperCase()].filter((score) => {
+    const scores: Score[] = state.scores[groupName.toUpperCase()]
+    if (!scores) {
+      return []
+    }
+    return scores.filter((score) => {
       return score.currentPoints > 0
     })
   },
   getPosition: (state) => (problemName: string) => {
+    const allScores: Score[][] = Object.values(state.scores)
+    if (allScores.length === 0) {
+      return -1
+    }
     return Object.values(state.scores)[0].findIndex((score: Score) => score.problem.name === problemName) + 1
   },
 }

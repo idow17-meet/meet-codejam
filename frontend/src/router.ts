@@ -5,6 +5,7 @@ import Home from './views/Home.vue'
 import ViewProblem from './views/ViewProblem.vue'
 import GroupProfile from './views/GroupProfile.vue'
 import Login from './views/Login.vue'
+import NotFound from './views/NotFound.vue'
 
 Vue.use(Router)
 
@@ -40,18 +41,6 @@ const router = new Router({
       name: 'groupProfile',
       component: GroupProfile,
       props: true,
-      // Validate group exists
-      beforeEnter: (to, from, next) => {
-        function isValid(name: string) {
-           return name.toUpperCase() in store.getters['scores/all'] && store.getters['groups/group'](name)
-        }
-
-        if (!isValid(to.params.name)) {
-          next('404')
-        }
-
-        next()
-       },
     },
     {
       path: '/login',
@@ -61,11 +50,17 @@ const router = new Router({
         public: true,
       },
     },
-     // TODO: Add 404 instead of redirecting home
+    {
+      path: '/404',
+      name: 'notFound',
+      component: NotFound,
+      meta: {
+        public: true,
+      },
+    },
     {
       path: '*',
-      name: 'notFound',
-      redirect: {name: 'home'},
+      redirect: {name: 'notFound'},
     },
   ],
 })
