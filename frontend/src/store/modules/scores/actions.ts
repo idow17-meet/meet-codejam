@@ -8,7 +8,7 @@ import axios from 'axios'
 export const actions: ActionTree<ScoresState, RootState> = {
   fetchGroup(context, groupName: string) {
     return new Promise((resolve, reject) => {
-      axios.get('/api/scores/' + groupName)
+      axios.get('/api/scores/groups/' + groupName)
       .then((response) => {
         const rawScores: IScore[] = response.data
         const scores = rawScores.map((rawScore: IScore) => new Score(rawScore))
