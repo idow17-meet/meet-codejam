@@ -46,12 +46,7 @@ def get_all_scores(solved_only: bool = True, show_self: bool = True, problem_nam
     return out_scores
 
 
-@scores.get('/groups', response_model=List[OutScore], response_model_exclude={'group_id'})
-def get_current_group_scores(current_user: DBGroup = Depends(get_current_user)):
-    return get_group_scores(current_user.name)
-
-
-@scores.get('/groups/{group_name}', response_model=List[OutScore], response_model_exclude={'group_id'})
+@scores.get('/{group_name}', response_model=List[OutScore], response_model_exclude={'group_id'})
 def get_group_scores(group_name: str, current_user: DBGroup = Depends(get_current_user)):
     db_session = get_db()
     group_scores = db_session.get_group_scores(group_name)
@@ -69,7 +64,7 @@ def get_group_scores(group_name: str, current_user: DBGroup = Depends(get_curren
     return output_scores
 
 
-@scores.get('/groups/{group_name}/{problem_name}', response_model=OutScore)
+@scores.get('/{group_name}/{problem_name}', response_model=OutScore)
 def get_group_score(group_name: str, problem_name: str, current_user: DBGroup = Depends(get_current_user)):
     db_session = get_db()
     score = db_session.get_group_score(group_name, problem_name)
