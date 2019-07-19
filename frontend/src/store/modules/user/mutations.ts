@@ -11,5 +11,6 @@ export const mutations: MutationTree<UserState> = {
   logout(state) {
     state.groupId = null
     localStorage.removeItem('groupId')
+    document.cookie = 'session= ; expires = Thu, 01 Jan 1970 00:00:00 GMT'
   },
 }
