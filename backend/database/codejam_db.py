@@ -117,10 +117,11 @@ class CodejamDB(ABC):
         pass
 
     @abstractmethod
-    def get_group_scores(self, group_name: str) -> model.ScoreList:
+    def get_group_scores(self, group_name: str, solved_only: bool = False) -> model.ScoreList:
         """
         Gets the group's entire score list
 
+        :param solved_only: Whether only the group's solved problems should be queried
         :param group_name: Group's name or ID (name converted to ID)
         """
         pass

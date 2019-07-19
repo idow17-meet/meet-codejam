@@ -44,6 +44,10 @@ class MongoCodejamDB(CodejamDB):
     def __hash_password(self, password: str) -> bytes:
         return sha512(password.encode() + self.__password_salt.encode()).digest()
 
+    @staticmethod
+    def __add_solved_only_filter(query: dict):
+        query.update({const.SCORE_CURRENT_POINTS: {"$gt": 0}})
+
     def add_group(self, group: model.InGroup):
         if self.__groups.count_documents({const.ID_KEY: group.name.upper()}) > 0:
             raise ValueError("Group with given name already exists")
@@ -128,8 +132,13 @@ class MongoCodejamDB(CodejamDB):
         if score:
             return trans.document_to_score(score)
 
-    def get_group_scores(self, group_name: str) -> model.ScoreList:
-        score_documents = self.__scores.find({const.SCORE_GROUP_ID: group_name.upper()})
+    def get_group_scores(self, group_name: str, solved_only: bool = False) -> model.ScoreList:
+        query = {const.SCORE_GROUP_ID: group_name.upper()}
+
+        if solved_only:
+            self.__add_solved_only_filter(query)
+
+        score_documents = self.__scores.find(query)
         return [trans.document_to_score(document) for document in score_documents]
 
     def get_all_scores(self, solved_only: bool = False, excluded_groups: List[str] = None, problem_name: str = None) \
@@ -144,7 +153,7 @@ class MongoCodejamDB(CodejamDB):
             query.update({const.SCORE_PROBLEM_ID: problem_name.upper()})
 
         if solved_only:
-            query.update({const.SCORE_CURRENT_POINTS: {"$gt": 0}})
+            self.__add_solved_only_filter(query)
 
         group = {const.ID_KEY: f'${const.SCORE_GROUP_ID}',
                  const.SCORES_AGGREGATION: {"$push": "$$ROOT"}}

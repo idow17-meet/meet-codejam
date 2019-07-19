@@ -47,9 +47,9 @@ def get_all_scores(solved_only: bool = True, show_self: bool = True, problem_nam
 
 
 @scores.get('/{group_name}', response_model=List[OutScore], response_model_exclude={'group_id'})
-def get_group_scores(group_name: str, current_user: DBGroup = Depends(get_current_user)):
+def get_group_scores(group_name: str, solved_only: bool = False, current_user: DBGroup = Depends(get_current_user)):
     db_session = get_db()
-    group_scores = db_session.get_group_scores(group_name)
+    group_scores = db_session.get_group_scores(group_name, solved_only=solved_only)
     if not group_scores:
         raise HTTPException(status_code=HTTP_404_NOT_FOUND,
                             detail="No scores found for the given group name")
