@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Body
 from starlette.responses import Response
 from starlette.status import HTTP_404_NOT_FOUND
-from typing import List
+from typing import List, Dict
 import logging
 
 from backend.database.model import DBGroup, OutScore, DBScore
@@ -30,7 +30,20 @@ def create_out_score(db_session: CodejamDB, score: DBScore) -> OutScore:
     return out_score
 
 
-@scores.get('/', response_model=List[OutScore], response_model_exclude={'group_id'})
+@scores.get('/', response_model=Dict[str, List[OutScore]])
+def get_all_scores(solved_only: bool = True, show_self: bool = True, current_user: DBGroup = Depends(get_current_user)):
+    db_session = get_db()
+    excluded_groups = []
+    if not show_self:
+        excluded_groups.append(current_user.name)
+
+    all_scores = db_session.get_all_scores(solved_only=solved_only, excluded_groups=excluded_groups)
+    out_scores = {group_id: [create_out_score(db_session, score) for score in all_scores[group_id]]
+                  for group_id in all_scores}
+    return out_scores
+
+
+@scores.get('/groups', response_model=List[OutScore], response_model_exclude={'group_id'})
 def get_current_group_scores(current_user: DBGroup = Depends(get_current_user)):
     return get_group_scores(current_user.name)
 
