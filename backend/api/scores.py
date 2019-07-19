@@ -31,13 +31,16 @@ def create_out_score(db_session: CodejamDB, score: DBScore) -> OutScore:
 
 
 @scores.get('/', response_model=Dict[str, List[OutScore]])
-def get_all_scores(solved_only: bool = True, show_self: bool = True, current_user: DBGroup = Depends(get_current_user)):
+def get_all_scores(solved_only: bool = True, show_self: bool = True, problem_name: str = None,
+                   current_user: DBGroup = Depends(get_current_user)):
     db_session = get_db()
     excluded_groups = []
     if not show_self:
         excluded_groups.append(current_user.name)
 
-    all_scores = db_session.get_all_scores(solved_only=solved_only, excluded_groups=excluded_groups)
+    all_scores = db_session.get_all_scores(solved_only=solved_only,
+                                           excluded_groups=excluded_groups,
+                                           problem_name=problem_name)
     out_scores = {group_id: [create_out_score(db_session, score) for score in all_scores[group_id]]
                   for group_id in all_scores}
     return out_scores

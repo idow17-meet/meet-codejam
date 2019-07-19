@@ -132,13 +132,16 @@ class MongoCodejamDB(CodejamDB):
         score_documents = self.__scores.find({const.SCORE_GROUP_ID: group_name.upper()})
         return [trans.document_to_score(document) for document in score_documents]
 
-    def get_all_scores(self, solved_only: bool = False, excluded_groups: List[str] = None) \
+    def get_all_scores(self, solved_only: bool = False, excluded_groups: List[str] = None, problem_name: str = None) \
             -> Dict[str, model.ScoreList]:
         if not excluded_groups:
             excluded_groups = []
         excluded_groups = [group_name.upper() for group_name in excluded_groups]
 
         query = {const.SCORE_GROUP_ID: {"$nin": excluded_groups}}
+
+        if problem_name:
+            query.update({const.SCORE_PROBLEM_ID: problem_name.upper()})
 
         if solved_only:
             query.update({const.SCORE_CURRENT_POINTS: {"$gt": 0}})

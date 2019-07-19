@@ -136,13 +136,14 @@ class CodejamDB(ABC):
         pass
 
     @abstractmethod
-    def get_all_scores(self, solved_only: bool = False, excluded_groups: List[str] = None) \
+    def get_all_scores(self, solved_only: bool = False, excluded_groups: List[str] = None, problem_name: str = None) \
             -> Dict[str, model.ScoreList]:
         """
         Retrieves all of the scores in the database
 
         :param solved_only: Whether only solved scores (points above 0) should be included, defaults to False
         :param excluded_groups: A list of group names to exclude from the query, such as the current user
+        :param problem_name: A specific problem to query by, if given, returns all scores of one problem
         :return: A dictionary that maps group IDS to a list of their scores
         """
         pass
