@@ -173,6 +173,10 @@ export default class ViewProblem extends Vue {
 
     return valid
   }
+
+  private created() {
+    this.$store.dispatch('scores/fetchSolvers', this.problem.name)
+  }
 }
 </script>
 

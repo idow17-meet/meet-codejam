@@ -17,8 +17,16 @@ export const mutations: MutationTree<ScoresState> = {
     }
   },
   setGroupScore(state, {groupName, score}: {groupName: string, score: Score}) {
-    const scoreIndex = state.scores[groupName].findIndex(
-      (currentScore) => currentScore.problem.id === score.problem.id)
-    state.scores[groupName][scoreIndex] = score
+    if (groupName in state.scores) {
+      const scoreIndex = state.scores[groupName].findIndex(
+        (currentScore) => currentScore.problem.id === score.problem.id)
+      if (scoreIndex > -1) {
+        state.scores[groupName][scoreIndex] = score
+      } else {
+        state.scores[groupName].push(score)
+      }
+    } else {
+      Vue.set(state.scores, groupName, [score])
+    }
   },
 }
