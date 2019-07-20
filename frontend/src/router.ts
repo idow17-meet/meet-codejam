@@ -6,6 +6,8 @@ import ViewProblem from './views/ViewProblem.vue'
 import GroupProfile from './views/GroupProfile.vue'
 import Login from './views/Login.vue'
 import NotFound from './views/NotFound.vue'
+import Leaderboard from './views/Leaderboards.vue'
+
 
 Vue.use(Router)
 
@@ -30,7 +32,7 @@ const router = new Router({
         }
 
         if (!isValid(Number(to.params.number))) {
-          next('404')
+          next({name: 'notFound'})
         }
 
         next()
@@ -49,6 +51,11 @@ const router = new Router({
       meta: {
         public: true,
       },
+    },
+    {
+      path: '/leaderboards',
+      name: 'leaderboards',
+      component: Leaderboard,
     },
     {
       path: '/404',

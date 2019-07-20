@@ -27,7 +27,7 @@ export const actions: ActionTree<ScoresState, RootState> = {
       })
     })
   },
-  fetchSolvers(context, problemName: string) {
+  fetchSolved(context, problemName: string) {
     return new Promise((resolve, reject) => {
       axios.get(`/api/scores/?solved_only=1&problem_name=${problemName}`)
       .then((response) => {
@@ -35,14 +35,20 @@ export const actions: ActionTree<ScoresState, RootState> = {
         for (const groupId in solvedDict) {
           if (solvedDict[groupId].length > 0) {
             solvedDict[groupId] = solvedDict[groupId].map((rawScore) => convertRawScore(rawScore))
-            context.commit('setGroupScore', {groupName: groupId, score: solvedDict[groupId][0]})
+            solvedDict[groupId].forEach((score) => {
+              context.commit('setGroupScore', {groupName: groupId, score})
+            })
           }
         }
+        resolve(response)
       })
       .catch((err) => {
         reject(err)
       })
     })
+  },
+  fetchAllSolved(context) {
+    context.dispatch('fetchSolved', '')
   },
   setGroupScore(context, {groupName, score}: {groupName: string, score: Score}) {
     context.commit('setGroupScore', {groupName, score})

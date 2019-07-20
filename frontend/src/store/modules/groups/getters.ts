@@ -27,4 +27,10 @@ export const getters: GetterTree<GroupsState, RootState> = {
 
         return groups
     },
+    name: (state) => (groupId: string) => {
+        const group = state.groups.find((group) => group.id === groupId)
+        if (group) {
+            return group.name
+        }
+    },
 }

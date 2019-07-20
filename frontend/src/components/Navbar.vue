@@ -10,7 +10,7 @@
       <ul class='navbar-nav mr-auto'>
         <template v-if="$store.getters['user/loggedIn'] && $store.getters['user/group']">
           <li class='nav-item'>
-            <a class='nav-link' href='#broken'>leaderboard</a>
+            <router-link class='nav-link' :to="{name: 'leaderboards'}">leaderboard</router-link>
           </li>
           <li class='nav-item'>
             <router-link class='nav-link' :to="{name: 'home'}" exact>problems</router-link>
