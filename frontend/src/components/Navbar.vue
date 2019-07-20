@@ -8,7 +8,7 @@
 
     <div class='collapse navbar-collapse' id='navbarsExample09'>
       <ul class='navbar-nav mr-auto'>
-        <template v-if="$store.getters['user/loggedIn']">
+        <template v-if="$store.getters['user/loggedIn'] && $store.getters['user/group']">
           <li class='nav-item'>
             <a class='nav-link' href='#broken'>leaderboard</a>
           </li>

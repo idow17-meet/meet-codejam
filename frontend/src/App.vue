@@ -26,9 +26,9 @@ export default class App extends Vue {
       return Promise.reject(err)
     })
 
-    // Load scores as soon as app loads if logged in
+    // Load initial state on app startup
     if (this.$store.getters['user/loggedIn']) {
-      this.$store.dispatch('scores/fetchGroup', this.$store.getters['user/id'])
+      this.$store.dispatch('fetchBaseState')
     }
   }
 }

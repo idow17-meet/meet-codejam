@@ -22,20 +22,32 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Group, Score} from '@/classes'
 import SolvedBadge from '@/components/SolvedBadge.vue'
 import { Route } from 'vue-router'
+import { AxiosError } from 'axios'
 
 @Component({components: { SolvedBadge }})
 export default class GroupProfile extends Vue {
   @Prop() private name!: string
-  get group(): Group {return this.$store.getters['groups/group'](this.name)}
+  get group(): Group {return this.$store.getters['groups/one'](this.name)}
   get solvedScores(): Score[] {return this.$store.getters['scores/solved'](this.name)}
 
   private created() {
     if (this.solvedScores.length === 0) {
-      this.$store.dispatch('scores/fetchGroup', this.name)
-      .catch((error) => {
-        this.$router.push({name: 'notFound'})
-      })
+      const promise = this.$store.dispatch('scores/fetchGroup', this.name)
+      this.redirectIfNotFound(promise)
     }
+
+    if (!this.group) {
+      const promise = this.$store.dispatch('groups/fetchOne', this.name)
+      this.redirectIfNotFound(promise)
+    }
+  }
+
+  private redirectIfNotFound(promise: Promise<any>) {
+    promise.catch((error: AxiosError<any>) => {
+      if (error.response && error.response.status === 404) {
+          this.$router.push({name: 'notFound'})
+        }
+    })
   }
 }
 </script>

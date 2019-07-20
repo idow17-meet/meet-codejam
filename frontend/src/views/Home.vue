@@ -39,11 +39,16 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import ScoreItem from '@/components/ScoreItem.vue'
-import { Score, Problem } from '@/classes'
+import { Score, Problem, Group } from '@/classes'
 
 @Component({components: {ScoreItem}})
 export default class Home extends Vue {
-  private groupName = this.$store.getters['user/group'].name
+  get groupName() {
+    const group: Group = this.$store.getters['user/group']
+    if (group) {
+      return group.name
+    }
+  }
 }
 </script>
 

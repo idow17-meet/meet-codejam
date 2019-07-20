@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex, { StoreOptions } from 'vuex'
 import { RootState } from '@/store/types'
+import actions from './actions'
 import scoresModule from './modules/scores'
 import userModule from './modules/user'
 import groupsModule from './modules/groups'
@@ -16,6 +17,7 @@ const storeOptions: StoreOptions<RootState> = {
     user: userModule,
     groups: groupsModule,
   },
+  actions,
 }
 
 const store = new Vuex.Store<RootState>(storeOptions)
@@ -39,5 +41,4 @@ if (module.hot) {
   })
 }
 
-store.dispatch('groups/fetchGroups')
 export default store

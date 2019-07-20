@@ -176,6 +176,7 @@ export default class ViewProblem extends Vue {
 
   private created() {
     this.$store.dispatch('scores/fetchSolvers', this.problem.name)
+    this.$store.dispatch('groups/fetchAll')
   }
 }
 </script>

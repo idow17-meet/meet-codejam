@@ -7,7 +7,7 @@ export const getters: GetterTree<UserState, RootState> = {
     return state.groupId
   },
   group: (state, getters, rootState, rootGetters) => {
-    return rootGetters['groups/group'](state.groupId)
+    return rootGetters['groups/one'](state.groupId)
   },
   scores: (state, getters, rootState, rootGetters) => {
     if (state.groupId) {
