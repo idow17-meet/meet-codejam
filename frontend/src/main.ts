@@ -5,7 +5,13 @@ import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import store from './store'
 import Axios, { AxiosStatic } from 'axios'
-import '@fortawesome/fontawesome-free/js/all.js'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCheck } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faCheck)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 
 Vue.config.productionTip = false

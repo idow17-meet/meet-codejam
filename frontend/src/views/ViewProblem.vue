@@ -52,7 +52,7 @@
         </form>
     </div>
     <div class="col-md-6 offset-md-3" v-if="solved">
-      <i class="fa fa-check" aria-hidden="true"></i>
+      <font-awesome-icon icon="check" class="solved-check"></font-awesome-icon>
     </div>
   </div>
   <div class="row" style="margin-top: 40px;">
@@ -203,7 +203,7 @@ p.problem, .hint-alert {
   margin-bottom: 10px;
 }
 
-.fa-check {
+.solved-check {
   font-size: 160px;
   color: rgb(119, 233, 119);
 }
