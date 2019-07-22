@@ -1,4 +1,4 @@
-<template>
+<template is="transition-group">
 <tr>
   <td>{{ rank.position }}</td>
   <td>

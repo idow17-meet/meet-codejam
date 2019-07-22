@@ -48,7 +48,15 @@ export const actions: ActionTree<ScoresState, RootState> = {
     })
   },
   fetchAllSolved(context) {
-    context.dispatch('fetchSolved', '')
+    return new Promise((resolve, reject) => {
+      context.dispatch('fetchSolved', '')
+      .then((response) => {
+        resolve(response)
+      })
+      .catch((err) => {
+        reject(err)
+      })
+    })
   },
   setGroupScore(context, {groupName, score}: {groupName: string, score: Score}) {
     context.commit('setGroupScore', {groupName, score})
