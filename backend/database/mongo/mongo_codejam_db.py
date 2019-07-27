@@ -10,14 +10,16 @@ In the groups and problems collections however, the _id key is inserted at creat
 version of the group / problem's name (since the name is unique, and this makes operations easier)
 """
 from typing import List, Dict
-
 from pymongo import MongoClient
 from hashlib import sha512
+import os
+import logging
 
 import backend.database.model as model
 from backend.database.codejam_db import CodejamDB
 import backend.database.mongo.consts as const
 import backend.database.mongo.translations as trans
+from backend.conf import ENV_PASSWORD_SALT
 
 
 class MongoCodejamDB(CodejamDB):
@@ -38,8 +40,11 @@ class MongoCodejamDB(CodejamDB):
         self.__groups = self.__db[const.GROUP_COLLECTION]
         self.__scores = self.__db[const.SCORE_COLLECTION]
 
-        # TODO: When deploying, replace this with an environment variable
-        self.__password_salt = 'b32197fwqgfFWEIO014jfx-a?'
+        self.__password_salt = os.environ.get(ENV_PASSWORD_SALT, None)
+
+        if not self.__password_salt:
+            logging.fatal(f"No password salt defined in environment variables '{ENV_PASSWORD_SALT}'")
+            exit(1)
 
     def __hash_password(self, password: str) -> bytes:
         return sha512(password.encode() + self.__password_salt.encode()).digest()
