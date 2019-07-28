@@ -33,7 +33,7 @@ export class Score {
   get state(): ScoreState {
     if (this.currentPoints === 0) {
       return ScoreState.NOT_DONE
-    } else if (this.currentPoints === this.problem.points) {
+    } else if (this.currentPoints >= this.problem.points) {
       return ScoreState.MAX_SCORE
     } else {
       return ScoreState.PARTIAL_SCORE
