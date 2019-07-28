@@ -7,6 +7,7 @@ import logging
 from backend.database.model import DBGroup, OutScore, DBScore
 from .database import get_db, CodejamDB
 from .auth import get_current_user
+from .groups import is_hidden_to_user
 
 
 scores = APIRouter()
@@ -43,6 +44,11 @@ def get_all_scores(solved_only: bool = True, show_self: bool = True, problem_nam
                                            problem_name=problem_name)
     out_scores = {group_id: [create_out_score(db_session, score) for score in all_scores[group_id]]
                   for group_id in all_scores}
+
+    for group_id in list(out_scores.keys()):
+        group = db_session.get_group(group_id)
+        if is_hidden_to_user(current_user, group):
+            out_scores.pop(group_id)
     return out_scores
 
 
@@ -50,7 +56,8 @@ def get_all_scores(solved_only: bool = True, show_self: bool = True, problem_nam
 def get_group_scores(group_name: str, solved_only: bool = False, current_user: DBGroup = Depends(get_current_user)):
     db_session = get_db()
     group_scores = db_session.get_group_scores(group_name, solved_only=solved_only)
-    if not group_scores:
+    group = db_session.get_group(group_name)
+    if not group_scores or is_hidden_to_user(current_user, group):
         raise HTTPException(status_code=HTTP_404_NOT_FOUND,
                             detail="No scores found for the given group name")
     output_scores = []
@@ -68,8 +75,8 @@ def get_group_scores(group_name: str, solved_only: bool = False, current_user: D
 def get_group_score(group_name: str, problem_name: str, current_user: DBGroup = Depends(get_current_user)):
     db_session = get_db()
     score = db_session.get_group_score(group_name, problem_name)
-
-    if not score:
+    group = db_session.get_group(group_name)
+    if not score or is_hidden_to_user(current_user, group):
         raise HTTPException(status_code=HTTP_404_NOT_FOUND,
                             detail="Score not found")
 
